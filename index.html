@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#04080f">
 <title>Ashlyticss — Business & Data Analytics Agency | Power BI Dashboards</title>
 <meta name="description" content="Ashlyticss helps growing businesses make faster, smarter decisions through Power BI dashboards, sales analytics, marketing analytics, and data engineering. Based in Ahmedabad, serving clients globally.">
 <meta property="og:title" content="Ashlyticss — Data Analytics Agency">
@@ -20,6 +21,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* Critical above-fold: page fade-in */
+body{opacity:0;animation:pageLoad .4s .1s ease forwards}
+@keyframes pageLoad{to{opacity:1}}
+/* Force GPU layers on key animated elements */
+#cur,#cring,nav,#spbar,.hrad,.hrad2,.hrad3,.hfloat,.h-tilt,
+.wa-float,.tmarquee-track,.mtrack,.live,.wa-pulse{
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+</style>
+<noscript><style>body{opacity:1!important;animation:none!important}</style></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -40,17 +54,47 @@
   --fs:'Lora',serif;
   --fm:'IBM Plex Mono',monospace;
 }
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:#04080f;color:var(--cream);font-family:var(--fh);overflow-x:hidden;cursor:none}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:#04080f;color:var(--cream);font-family:var(--fh);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+@media(max-width:900px){
+  .nlinks{display:none}
+  .npill{display:none}
+  .ham{display:flex}
+}
 @media(hover:none),(pointer:coarse){body{cursor:auto}#cur,#cring{display:none!important}}
-#cur{position:fixed;width:12px;height:12px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .25s,height .25s}
-#cring{position:fixed;width:40px;height:40px;border:1px solid rgba(56,189,248,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .08s linear}
-body.hov #cur{width:20px;height:20px}
-body.hov #cring{width:64px;height:64px;border-color:rgba(56,189,248,.9)}
+#cur{position:fixed;width:12px;height:12px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%) scale(1);mix-blend-mode:screen;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+#cring{position:fixed;width:40px;height:40px;border:1px solid rgba(56,189,248,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%) scale(1);transition:transform .08s linear,border-color .15s,opacity .15s}
+body.hov #cur{transform:translate(-50%,-50%) scale(1.7)}
+body.hov #cring{transform:translate(-50%,-50%) scale(1.6);border-color:rgba(56,189,248,.9)}
 #pc{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.8}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#04080f}
 ::-webkit-scrollbar-thumb{background:rgba(56,189,248,.3);border-radius:2px}
+/* SCROLL PROGRESS BAR */
+#spbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#0ea5e9,#38bdf8,#7dd3fc);z-index:9999;width:0;transition:width .1s linear;pointer-events:none;will-change:width}
+/* GPU acceleration hints — surgical will-change */
+.hrad,.hrad2,.hrad3{will-change:transform}
+.hfloat{will-change:transform,opacity}
+.h-tilt{will-change:transform}
+nav{will-change:transform,background-color,backdrop-filter}
+.hchart{will-change:opacity,transform}
+#spbar{will-change:width}
+#cur{will-change:left,top}
+#cring{will-change:left,top,width,height}
+/* Layout containment for perf-critical sections */
+#services,#tech,#work,#testi,#process,#faq,#global{contain:layout style}
+.svc,.tc,.wc,.tcard,.gind{contain:layout style paint}
+
+/* Respect user's motion preferences */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .tmarquee-track{animation:none!important}
+  .mtrack{animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* corner accent marks */
+.acorn{position:absolute;width:20px;height:20px}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:26px 64px;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
@@ -71,14 +115,19 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 .nlinks a.nav-cta::after{display:none}
 .npill{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:.52rem;letter-spacing:2px;color:var(--gold2);margin-left:28px;background:rgba(56,189,248,.06);border:1px solid var(--border2);padding:6px 14px}
 .live{width:6px;height:6px;background:#4dbe6a;border-radius:50%;animation:lp 2s ease-in-out infinite;flex-shrink:0;box-shadow:0 0 6px rgba(77,190,106,.6)}
-.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
-.ham span{display:block;width:26px;height:1.5px;background:var(--gold);border-radius:2px;transition:all .3s}
-.mnav{display:none;position:fixed;inset:0;background:rgba(4,8,15,.98);z-index:400;flex-direction:column;align-items:center;justify-content:center;gap:28px;overflow-y:auto}
-.mnav.open{display:flex}
-.mnav a{font-family:var(--fh);font-size:2.2rem;font-weight:900;color:var(--cream);text-decoration:none;letter-spacing:2px;transition:color .2s;opacity:0;animation:slideR .4s forwards}
-.mnav.open a:nth-child(2){animation-delay:.05s}.mnav.open a:nth-child(3){animation-delay:.1s}.mnav.open a:nth-child(4){animation-delay:.15s}.mnav.open a:nth-child(5){animation-delay:.2s}.mnav.open a:nth-child(6){animation-delay:.25s}.mnav.open a:nth-child(7){animation-delay:.3s}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;touch-action:manipulation}
+.ham span{display:block;width:26px;height:1.5px;background:var(--gold);border-radius:2px;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s}
+.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+/* Mobile nav: use visibility+opacity for smooth GPU transition instead of display swap */
+.mnav{visibility:hidden;opacity:0;position:fixed;inset:0;background:rgba(4,8,15,.98);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;overflow-y:auto;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);transition:opacity .3s,visibility .3s;pointer-events:none}
+.mnav.open{visibility:visible;opacity:1;pointer-events:auto}
+.mnav a{font-family:var(--fh);font-size:clamp(1.6rem,6vw,2.2rem);font-weight:900;color:var(--cream);text-decoration:none;letter-spacing:2px;transition:color .2s;opacity:0;transform:translateX(-20px);transition:color .2s,opacity .35s,transform .35s;touch-action:manipulation}
+.mnav.open a{opacity:1;transform:none}
+.mnav.open a:nth-child(2){transition-delay:.04s}.mnav.open a:nth-child(3){transition-delay:.09s}.mnav.open a:nth-child(4){transition-delay:.14s}.mnav.open a:nth-child(5){transition-delay:.19s}.mnav.open a:nth-child(6){transition-delay:.24s}.mnav.open a:nth-child(7){transition-delay:.29s}
 .mnav a:hover{color:var(--gold)}
-.mcls{position:absolute;top:24px;right:28px;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer}
+.mcls{position:absolute;top:24px;right:28px;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer;touch-action:manipulation}
 
 /* HERO */
 #hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:center;padding:140px 72px 100px;position:relative;overflow:hidden;z-index:2}
@@ -144,9 +193,7 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 .h-scroll-line{width:1px;height:40px;background:linear-gradient(180deg,rgba(56,189,248,.4),transparent);animation:scrollPulse 2s ease-in-out infinite}
 @keyframes scrollPulse{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(.7)}}
 /* STICKY WHATSAPP */
-#waBtn{position:fixed;bottom:28px;right:28px;z-index:500;width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(37,211,102,.4),0 0 0 0 rgba(37,211,102,.3);animation:waPulse 2.5s ease-in-out infinite;text-decoration:none;transition:transform .2s}
-#waBtn:hover{transform:scale(1.1)}
-@keyframes waPulse{0%,100%{box-shadow:0 4px 24px rgba(37,211,102,.4),0 0 0 0 rgba(37,211,102,.3)}50%{box-shadow:0 4px 24px rgba(37,211,102,.5),0 0 0 10px rgba(37,211,102,0)}}
+
 
 /* BUTTONS */
 .bpri{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:#030c18;font-family:var(--fh);font-size:.72rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:17px 40px;text-decoration:none;transition:all .35s;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(56,189,248,.25)}
@@ -159,7 +206,7 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 
 /* STAT BAND */
 .sband{padding:28px 64px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:2;background:linear-gradient(180deg,rgba(7,14,26,.6),transparent)}
-.si{padding:24px 32px;border-right:1px solid var(--border2);opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s;position:relative;overflow:hidden}
+.si{padding:24px 32px;border-right:1px solid var(--border2);opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
 .si::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s}
 .si:hover::after{opacity:1}
 .si:last-child{border-right:none}
@@ -169,6 +216,7 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 
 /* MARQUEE */
 .mwrap{padding:16px 0;border-bottom:1px solid var(--border2);overflow:hidden;background:rgba(56,189,248,.025)}
+.mwrap:hover .mtrack{animation-play-state:paused}
 .mtrack{display:flex;animation:mq 28s linear infinite;width:max-content}
 .mitem{display:flex;align-items:center;font-family:var(--fm);font-size:.58rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);padding:0 32px;border-right:1px solid var(--border2);white-space:nowrap}
 .mdot{width:5px;height:5px;background:var(--gold);border-radius:50%;margin-right:14px;flex-shrink:0;box-shadow:0 0 6px rgba(56,189,248,.6)}
@@ -178,13 +226,13 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 .eye::before{content:'';width:22px;height:1px;background:var(--gold)}
 .stitle{font-family:var(--fh);font-size:clamp(1.8rem,4vw,3.5rem);font-weight:900;line-height:1;letter-spacing:-1px;margin-bottom:14px}
 .ssub{font-family:var(--fm);font-size:.78rem;color:var(--muted2);line-height:1.85;max-width:500px}
-.rev{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.rev{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}
 .rev.v{opacity:1;transform:none}
 
 /* ABOUT */
 #about{padding:120px 72px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;border-bottom:1px solid var(--border2);position:relative;z-index:2;overflow:hidden}
 #about::before{content:'';position:absolute;top:-40%;right:-20%;width:60%;aspect-ratio:1;background:radial-gradient(circle,rgba(56,189,248,.05),transparent 65%);pointer-events:none}
-.aimg{opacity:0;transform:translateX(-40px);transition:opacity .9s,transform .9s}
+.aimg{opacity:0;transform:translateX(-40px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
 .aimg.v{opacity:1;transform:none}
 /* new layered visual container */
 .avis{position:relative}
@@ -271,12 +319,11 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 .ctip-level{font-family:var(--fm);font-size:.48rem;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
 .constellation-mobile-list{display:none;margin-top:32px;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(max-width:768px){
-  #constCanvas{display:none}
-  .constellation-center{display:none}
-  .cc-pulse,.cc-pulse2{display:none}
   .constellation-container{aspect-ratio:auto;max-height:none;height:auto}
   .constellation-tooltip{display:none}
-  .constellation-mobile-list{display:grid;grid-template-columns:repeat(2,1fr)}
+  .constellation-mobile-list{display:none!important}
+  .tech-cats{display:none!important}
+  .tpanels{display:none!important}
 }
 @media(max-width:480px){.constellation-mobile-list{grid-template-columns:1fr}}
 .cmob-card{background:var(--card);border:1px solid var(--border2);padding:12px 14px;transition:all .25s;cursor:default}
@@ -573,20 +620,44 @@ nav.s{background:rgba(4,8,15,.96);backdrop-filter:blur(28px);-webkit-backdrop-fi
 .dscene-cta::before{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .4s}
 .dscene-cta:hover::before{width:100%}
 
-/* RIGHT: dashboard preview */
-.dscene-right{position:relative;overflow:hidden;background:#030c18;display:flex;align-items:center;justify-content:center}
+/* RIGHT: before/after slider */
+.dscene-right{position:relative;overflow:hidden;background:#030c18;display:flex;align-items:center;justify-content:center;min-height:420px}
 .dscene-right::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(56,189,248,.08),transparent 65%);z-index:0;pointer-events:none}
-.dscene-mockup{position:relative;z-index:1;width:100%;transform:perspective(900px) rotateY(-6deg) rotateX(2deg);transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1);box-shadow:-24px 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(56,189,248,.12)}
-.dscene:hover .dscene-mockup{transform:perspective(900px) rotateY(-2deg) rotateX(1deg) translateX(8px)}
-.dscene-mockup-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(4,10,22,.98);border-bottom:1px solid rgba(56,189,248,.1)}
-.dscene-mockup-dots{display:flex;gap:5px}
-.dscene-mockup-dots span{width:8px;height:8px;border-radius:50%}
-.dscene-mockup-dots span:nth-child(1){background:rgba(239,68,68,.6)}
-.dscene-mockup-dots span:nth-child(2){background:rgba(234,179,8,.6)}
-.dscene-mockup-dots span:nth-child(3){background:rgba(34,197,94,.6)}
-.dscene-mockup-label{font-family:var(--fm);font-size:.46rem;letter-spacing:2px;color:rgba(186,230,253,.4);flex:1;text-align:center}
-.dscene-mockup-live{display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:.44rem;color:rgba(77,190,106,.7)}
-.dscene-mockup svg{width:100%;display:block}
+
+/* BEFORE/AFTER SPLIT SLIDER */
+.ba-wrap{position:relative;width:100%;height:100%;overflow:hidden;cursor:col-resize;user-select:none;-webkit-user-select:none}
+.ba-after{position:absolute;inset:0;z-index:1}
+.ba-before{position:absolute;inset:0;z-index:2;clip-path:inset(0 50% 0 0);will-change:clip-path}
+.ba-divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,transparent,#38bdf8 20%,#38bdf8 80%,transparent);z-index:10;transform:translateX(-50%);will-change:left;box-shadow:0 0 12px rgba(56,189,248,.6)}
+.ba-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:rgba(4,8,20,.95);border:2px solid #38bdf8;border-radius:50%;z-index:11;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(56,189,248,.5),0 4px 16px rgba(0,0,0,.6);will-change:left;cursor:col-resize}
+.ba-handle svg{width:18px;height:18px;fill:none;stroke:#38bdf8;stroke-width:2}
+.ba-label{position:absolute;top:12px;font-family:var(--fm);font-size:.46rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 10px;border-radius:2px;z-index:12;pointer-events:none;transition:opacity .3s}
+.ba-label.before{left:14px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:rgba(255,120,120,.9)}
+.ba-label.after{right:14px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:rgba(186,230,253,.9)}
+.ba-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:.44rem;letter-spacing:2px;color:rgba(56,189,248,.5);z-index:12;pointer-events:none;white-space:nowrap;animation:baPulse 2.5s ease-in-out infinite}
+@keyframes baPulse{0%,100%{opacity:.5}50%{opacity:1}}
+.ba-wrap.dragging .ba-hint{opacity:0}
+/* before panel — messy spreadsheet aesthetic */
+.ba-before-inner{position:absolute;inset:0;background:#0a0f1a;overflow:hidden}
+.ba-after-inner{position:absolute;inset:0;background:#030c18;overflow:hidden}
+/* spreadsheet grid lines */
+.ss-grid{position:absolute;inset:0}
+.ss-header{display:flex;position:absolute;top:0;left:0;right:0;height:24px;background:rgba(30,40,60,.9);border-bottom:1px solid rgba(80,100,130,.3)}
+.ss-cell-h{flex:1;border-right:1px solid rgba(80,100,130,.2);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:5px;color:rgba(120,150,180,.6);letter-spacing:1px}
+.ss-row{display:flex;position:absolute;left:0;right:0;height:22px;border-bottom:1px solid rgba(56,80,110,.15)}
+.ss-row:nth-child(odd){background:rgba(10,18,30,.6)}
+.ss-row:nth-child(even){background:rgba(6,12,22,.4)}
+.ss-cell{flex:1;border-right:1px solid rgba(56,80,110,.12);display:flex;align-items:center;padding:0 5px;font-family:var(--fm);font-size:5px;overflow:hidden;white-space:nowrap}
+.ss-cell.num{color:rgba(100,180,120,.7);justify-content:flex-end}
+.ss-cell.txt{color:rgba(160,180,200,.6)}
+.ss-cell.err{color:rgba(255,80,80,.7);background:rgba(255,50,50,.06)}
+.ss-cell.warn{color:rgba(240,180,50,.7);background:rgba(240,180,50,.05)}
+.ss-cell.hi{background:rgba(255,200,50,.08);color:rgba(255,210,80,.8)}
+.ss-chaos-badge{position:absolute;top:34px;right:8px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:3px;padding:5px 8px;font-family:var(--fm);font-size:5px;letter-spacing:1.5px;color:rgba(255,120,120,.8);z-index:5}
+/* after panel — dashboard */
+.ba-after-inner svg{width:100%;height:100%;display:block}
+/* mobile */
+@media(max-width:768px){.ba-handle{width:32px;height:32px}.ba-label{font-size:.38rem;padding:3px 7px}}
 
 /* alternating layout */
 .dscene:nth-child(even) .dscene-inner{direction:rtl}
@@ -686,9 +757,6 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
 .footer-bottom span{font-family:var(--fm);font-size:.54rem;letter-spacing:1.5px;color:var(--muted)}
 .footer-pill{display:flex;align-items:center;gap:8px}
 
-/* SCROLL PROGRESS BAR */
-#spbar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#0ea5e9,#38bdf8,#7dd3fc);z-index:9999;transition:width .05s linear;box-shadow:0 0 8px rgba(56,189,248,.5)}
-
 /* ROI + AUDIT COMBINED */
 #roi{padding:110px 64px;background:linear-gradient(180deg,#04080f 0%,#060e1c 100%);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);position:relative;z-index:2;overflow:hidden}
 #roi::before{content:'';position:absolute;top:-20%;left:-10%;width:55%;aspect-ratio:1;background:radial-gradient(circle,rgba(56,189,248,.06),transparent 65%);pointer-events:none}
@@ -697,7 +765,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
 .roi-combo-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:start}
 .roi-calc-panel{background:var(--card);border:1px solid var(--border2);border-radius:2px;padding:36px;position:relative;overflow:hidden}
 .roi-calc-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2),transparent)}
-.roi-left{opacity:0;transform:translateX(-30px);transition:opacity .9s,transform .9s}
+.roi-left{opacity:0;transform:translateX(-30px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
 .roi-left.v{opacity:1;transform:none}
 .roi-controls{display:flex;flex-direction:column;gap:20px}
 .roi-row{display:flex;flex-direction:column;gap:8px}
@@ -706,7 +774,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
 .roi-slider{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(56,189,248,.12);border-radius:2px;outline:none;cursor:pointer;transition:background .3s}
 .roi-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#38bdf8);cursor:pointer;box-shadow:0 0 10px rgba(56,189,248,.4)}
 .roi-slider:hover{background:rgba(56,189,248,.2)}
-.roi-right{opacity:0;transform:translateX(30px);transition:opacity .9s .15s,transform .9s .15s}
+.roi-right{opacity:0;transform:translateX(30px);transition:opacity .7s cubic-bezier(.4,0,.2,1) .12s,transform .7s cubic-bezier(.4,0,.2,1) .12s}
 .roi-right.v{opacity:1;transform:none}
 .roi-result{background:rgba(56,189,248,.04);border:1px solid var(--border2);padding:28px;border-radius:2px;margin-top:0}
 .roi-result::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2),transparent);margin:-28px -28px 24px}
@@ -826,7 +894,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
   .sband{grid-template-columns:1fr 1fr;padding:0 24px}.si{padding:20px 20px}.si:nth-child(2){border-right:none}.si:nth-child(3){border-top:1px solid var(--border2)}
   #about{padding:72px 24px;gap:36px;grid-template-columns:1fr}.avis-card{display:none}
   #services{padding:72px 24px}.svchd{gap:24px;margin-bottom:40px}.svc{padding:36px 24px}
-  #tech{padding:64px 24px}.tech-cats{gap:6px}.tcat{font-size:.52rem;padding:8px 14px}.tpanel{grid-template-columns:repeat(2,1fr)!important}
+  #tech{padding:64px 24px}
   #work{padding:72px 24px}.whd{margin-bottom:36px}
   #global{padding:48px 24px}
   #process{padding:72px 24px}.pipeline-steps{grid-template-columns:repeat(2,1fr)}.pnode-orbit{width:100px;height:100px}
@@ -839,12 +907,28 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
   .astat:nth-child(2)::after{display:none}
 }
 @media(max-width:480px){
-  #hero{padding:110px 20px 60px}
+  #hero{padding:110px 20px 60px;min-height:100svh}
   .sband{padding:0}
   #about,#services,#tech,#work,#global,#process,#founder{padding:52px 16px}
-  #testi{padding:52px 0}.testi-head{padding-left:20px;padding-right:20px}.tc{width:280px;padding:20px 16px}
+  #testi{padding:52px 0}.testi-head{padding-left:20px;padding-right:20px}.tc{width:min(280px,85vw);padding:20px 16px}
   .sgrid{grid-template-columns:1fr}.pipeline-steps{grid-template-columns:1fr}.contact-cards{grid-template-columns:1fr}.cc-left,.cc-right{padding:32px 20px}.contact-hero{padding:40px 20px 28px}
   .footer-top{padding:40px 16px}.footer-nav{grid-template-columns:1fr}.footer-bottom{padding:16px 20px}
+}
+/* Improve tap targets for mobile */
+@media(max-width:768px){
+  .bpri,.bsec{padding:16px 28px;min-height:48px}
+  .faq-q{padding:18px 16px;min-height:52px}
+  .nlinks a,.fsoc,.footer-contact-item{min-height:44px;display:flex;align-items:center}
+  /* Smooth scroll snap for testimonials on mobile */
+  .tscroll{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .tc{scroll-snap-align:start}
+  /* Safe area inset for notched devices */
+  nav{padding-left:max(24px, env(safe-area-inset-left));padding-right:max(24px, env(safe-area-inset-right))}
+  .wa-float{bottom:max(20px, env(safe-area-inset-bottom))}
+}
+/* Use 100svh for devices with dynamic toolbars */
+@supports(height:100svh){
+  #hero{min-height:100svh}
 }
 </style>
 </head>
@@ -853,10 +937,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
 <div id="spbar" role="progressbar" aria-label="Page scroll progress"></div>
 <div id="cur"></div>
 <div id="cring"></div>
-<!-- Sticky WhatsApp CTA -->
-<a id="waBtn" href="https://wa.me/919099867128" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-</a>
+<!-- Sticky WhatsApp CTA removed — using .wa-float below -->
 <canvas id="pc"></canvas>
 
 <nav id="nb" aria-label="Main navigation">
@@ -875,21 +956,21 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
     <li><a href="#services">Services</a></li>
     <li><a href="#work">Work</a></li>
     <li><a href="#process">Process</a></li>
-    <li><a href="#testi">Reviews</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
+    <li><a href="#testi">Reviews</a></li>
   </ul>
   <div class="npill"><span class="live"></span> Accepting Clients</div>
   <button class="ham" id="ham" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="mnav" id="mn">
-  <button class="mcls" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Close menu">&#x2715;</button>
+  <button class="mcls" id="mclsBtn" aria-label="Close menu">&#x2715;</button>
   <a href="#about" onclick="document.getElementById('mn').classList.remove('open')">About</a>
   <a href="#services" onclick="document.getElementById('mn').classList.remove('open')">Services</a>
   <a href="#work" onclick="document.getElementById('mn').classList.remove('open')">Work</a>
   <a href="#process" onclick="document.getElementById('mn').classList.remove('open')">Process</a>
-  <a href="#testi" onclick="document.getElementById('mn').classList.remove('open')">Reviews</a>
   <a href="#contact" onclick="document.getElementById('mn').classList.remove('open')" style="color:var(--gold)">Contact</a>
+  <a href="#testi" onclick="document.getElementById('mn').classList.remove('open')">Reviews</a>
 </div>
 
 <main id="main-content">
@@ -934,6 +1015,17 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
               <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(14,165,233,.2)"/><stop offset="100%" stop-color="rgba(14,165,233,0)"/></linearGradient>
               <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
               <linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#070e1a"/><stop offset="100%" stop-color="#04080f"/></linearGradient>
+              <style>
+                .chart-line{stroke-dasharray:500;stroke-dashoffset:500;animation:drawLine 2s 1.5s cubic-bezier(.4,0,.2,1) forwards}
+                .chart-fill{opacity:0;animation:fillFade .8s 2.2s forwards}
+                .kpi-card{opacity:0;animation:kpiFadeIn .5s forwards}
+                .kpi-1{animation-delay:1.2s}.kpi-2{animation-delay:1.35s}.kpi-3{animation-delay:1.5s}.kpi-4{animation-delay:1.65s}
+                @keyframes drawLine{to{stroke-dashoffset:0}}
+                @keyframes fillFade{to{opacity:1}}
+                @keyframes kpiFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+                .live-dot{animation:livePulse 2s ease-in-out infinite}
+                @keyframes livePulse{0%,100%{opacity:.8}50%{opacity:.3}}
+              </style>
             </defs>
             <rect width="500" height="360" rx="12" fill="url(#hbg)" stroke="rgba(56,189,248,.2)" stroke-width="1"/>
             <!-- title bar -->
@@ -943,25 +1035,33 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
             <circle cx="36" cy="20" r="5" fill="rgba(234,179,8,.6)"/>
             <circle cx="52" cy="20" r="5" fill="rgba(34,197,94,.6)"/>
             <text x="250" y="24" font-family="IBM Plex Mono" font-size="7.5" fill="rgba(186,230,253,.5)" text-anchor="middle" letter-spacing="3">EXECUTIVE DASHBOARD — LIVE</text>
-            <circle cx="482" cy="20" r="4" fill="#4dbe6a" opacity=".8"/>
+            <circle cx="482" cy="20" r="4" fill="#4dbe6a" opacity=".8" class="live-dot"/>
             <circle cx="482" cy="20" r="7" fill="rgba(77,190,106,.15)"/>
             <!-- KPI row -->
+            <g class="kpi-card kpi-1">
             <rect x="14" y="48" width="110" height="56" rx="6" fill="rgba(56,189,248,.06)" stroke="rgba(56,189,248,.15)" stroke-width="1"/>
             <text x="24" y="63" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(150,190,220,.7)" letter-spacing="1.5">REVENUE</text>
             <text x="24" y="83" font-family="IBM Plex Mono" font-size="17" fill="#38bdf8" font-weight="bold">$1.2M</text>
             <text x="24" y="96" font-family="IBM Plex Mono" font-size="6.5" fill="#4dbe6a">↑ 34% vs last q</text>
+            </g>
+            <g class="kpi-card kpi-2">
             <rect x="132" y="48" width="110" height="56" rx="6" fill="rgba(56,189,248,.06)" stroke="rgba(56,189,248,.15)" stroke-width="1"/>
             <text x="142" y="63" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(150,190,220,.7)" letter-spacing="1.5">RETENTION</text>
             <text x="142" y="83" font-family="IBM Plex Mono" font-size="17" fill="#38bdf8" font-weight="bold">87.4%</text>
             <text x="142" y="96" font-family="IBM Plex Mono" font-size="6.5" fill="#4dbe6a">↑ +6.2pts</text>
+            </g>
+            <g class="kpi-card kpi-3">
             <rect x="250" y="48" width="110" height="56" rx="6" fill="rgba(56,189,248,.06)" stroke="rgba(56,189,248,.15)" stroke-width="1"/>
             <text x="260" y="63" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(150,190,220,.7)" letter-spacing="1.5">ROAS</text>
             <text x="260" y="83" font-family="IBM Plex Mono" font-size="17" fill="#38bdf8" font-weight="bold">4.8×</text>
             <text x="260" y="96" font-family="IBM Plex Mono" font-size="6.5" fill="#4dbe6a">↑ from 2.9×</text>
+            </g>
+            <g class="kpi-card kpi-4">
             <rect x="368" y="48" width="118" height="56" rx="6" fill="rgba(56,189,248,.06)" stroke="rgba(56,189,248,.15)" stroke-width="1"/>
             <text x="378" y="63" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(150,190,220,.7)" letter-spacing="1.5">NPS</text>
             <text x="378" y="83" font-family="IBM Plex Mono" font-size="17" fill="#7dd3fc" font-weight="bold">72</text>
             <text x="378" y="96" font-family="IBM Plex Mono" font-size="6.5" fill="#4dbe6a">World-class</text>
+            </g>
             <!-- main chart area -->
             <rect x="14" y="114" width="318" height="180" rx="6" fill="rgba(4,8,20,.5)" stroke="rgba(56,189,248,.1)" stroke-width="1"/>
             <text x="24" y="130" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(150,190,220,.6)" letter-spacing="2">REVENUE TREND — 2025</text>
@@ -970,12 +1070,12 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
             <line x1="24" y1="182" x2="322" y2="182" stroke="rgba(56,189,248,.06)" stroke-width="1" stroke-dasharray="3 3"/>
             <line x1="24" y1="201" x2="322" y2="201" stroke="rgba(56,189,248,.06)" stroke-width="1" stroke-dasharray="3 3"/>
             <line x1="24" y1="220" x2="322" y2="220" stroke="rgba(56,189,248,.06)" stroke-width="1" stroke-dasharray="3 3"/>
-            <polygon points="30,222 66,214 104,206 142,191 180,174 218,154 256,138 294,125 322,116 322,238 30,238" fill="url(#hg1)"/>
-            <polygon points="30,228 66,222 104,218 142,210 180,200 218,186 256,174 294,162 322,150 322,238 30,238" fill="url(#hg2)"/>
-            <polyline points="30,222 66,214 104,206 142,191 180,174 218,154 256,138 294,125 322,116" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
-            <circle cx="322" cy="116" r="5" fill="#38bdf8" filter="url(#glow)"/>
-            <rect x="286" y="104" width="44" height="16" rx="3" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.3)" stroke-width="1"/>
-            <text x="308" y="115" font-family="IBM Plex Mono" font-size="7" fill="#38bdf8" text-anchor="middle" font-weight="bold">↑38%</text>
+            <polygon class="chart-fill" points="30,222 66,214 104,206 142,191 180,174 218,154 256,138 294,125 322,116 322,238 30,238" fill="url(#hg1)"/>
+            <polygon class="chart-fill" points="30,228 66,222 104,218 142,210 180,200 218,186 256,174 294,162 322,150 322,238 30,238" fill="url(#hg2)"/>
+            <polyline class="chart-line" points="30,222 66,214 104,206 142,191 180,174 218,154 256,138 294,125 322,116" stroke="#38bdf8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+            <circle cx="322" cy="116" r="5" fill="#38bdf8" filter="url(#glow)" class="chart-fill"/>
+            <rect x="286" y="104" width="44" height="16" rx="3" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.3)" stroke-width="1" class="chart-fill"/>
+            <text x="308" y="115" font-family="IBM Plex Mono" font-size="7" fill="#38bdf8" text-anchor="middle" font-weight="bold" class="chart-fill">↑38%</text>
             <text x="30" y="249" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.4)" text-anchor="middle">Jan</text>
             <text x="74" y="249" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.4)" text-anchor="middle">Feb</text>
             <text x="118" y="249" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.4)" text-anchor="middle">Mar</text>
@@ -1003,7 +1103,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
             <!-- status bar -->
             <rect x="1" y="335" width="498" height="24" rx="0" fill="rgba(4,8,20,.9)"/>
             <rect x="1" y="348" width="498" height="11" rx="12" fill="rgba(4,8,20,.9)"/>
-            <circle cx="16" cy="347" r="3" fill="#4dbe6a"/>
+            <circle cx="16" cy="347" r="3" fill="#4dbe6a" class="live-dot"/>
             <text x="26" y="350" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(150,190,220,.55)">Live · Last refresh: just now · Power BI · 4 data sources connected</text>
           </svg>
         </div>
@@ -1571,24 +1671,109 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
           <a href="#contact" class="dscene-cta">Build a Similar Dashboard &rarr;</a>
         </div>
         <div class="dscene-right">
-          <div class="dscene-mockup">
-            <div class="dscene-mockup-bar"><div class="dscene-mockup-dots"><span></span><span></span><span></span></div><div class="dscene-mockup-label">SALES PERFORMANCE — LIVE</div><div class="dscene-mockup-live"><span class="live"></span>Connected</div></div>
-            <svg viewBox="0 0 520 310" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sc1_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(56,189,248,.4)"/><stop offset="100%" stop-color="rgba(56,189,248,0)"/></linearGradient><filter id="sc1_glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <rect width="520" height="310" fill="#030c18"/>
-            <rect x="10" y="10" width="115" height="58" rx="3" fill="rgba(56,189,248,.09)" stroke="rgba(56,189,248,.25)" stroke-width="1"/><rect x="10" y="10" width="115" height="2" fill="#38bdf8"/><text x="18" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,190,220,.7)" letter-spacing="1">TOTAL REVENUE</text><text x="18" y="48" font-family="IBM Plex Mono" font-size="20" fill="#38bdf8" font-weight="bold">$842K</text><text x="18" y="61" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; 34% vs Q3</text>
-            <rect x="133" y="10" width="115" height="58" rx="3" fill="rgba(56,189,248,.05)" stroke="rgba(56,189,248,.12)" stroke-width="1"/><rect x="133" y="10" width="115" height="2" fill="rgba(56,189,248,.4)"/><text x="141" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,190,220,.7)" letter-spacing="1">DEALS WON</text><text x="141" y="48" font-family="IBM Plex Mono" font-size="20" fill="#38bdf8" font-weight="bold">186</text><text x="141" y="61" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; +22 this mo.</text>
-            <rect x="256" y="10" width="115" height="58" rx="3" fill="rgba(77,190,106,.06)" stroke="rgba(77,190,106,.2)" stroke-width="1"/><rect x="256" y="10" width="115" height="2" fill="#4dbe6a"/><text x="264" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,190,220,.7)" letter-spacing="1">WIN RATE</text><text x="264" y="48" font-family="IBM Plex Mono" font-size="20" fill="#4dbe6a" font-weight="bold">68%</text><text x="264" y="61" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; +8pts YoY</text>
-            <rect x="379" y="10" width="131" height="58" rx="3" fill="rgba(56,189,248,.05)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><rect x="379" y="10" width="131" height="2" fill="rgba(56,189,248,.25)"/><text x="387" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,190,220,.7)" letter-spacing="1">AVG DEAL SIZE</text><text x="387" y="48" font-family="IBM Plex Mono" font-size="20" fill="#38bdf8" font-weight="bold">$4.5K</text><text x="387" y="61" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; +12% MoM</text>
-            <rect x="10" y="76" width="330" height="165" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="91" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">MONTHLY REVENUE TREND</text>
-            <line x1="20" y1="115" x2="330" y2="115" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/><line x1="20" y1="145" x2="330" y2="145" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/><line x1="20" y1="175" x2="330" y2="175" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/>
-            <polygon points="20,225 62,218 104,210 146,197 188,181 230,160 272,140 314,126 330,120 330,235 20,235" fill="url(#sc1_g)"/><polyline points="20,225 62,218 104,210 146,197 188,181 230,160 272,140 314,126 330,120" stroke="#38bdf8" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#sc1_glow)"/><circle cx="330" cy="120" r="4.5" fill="#38bdf8" filter="url(#sc1_glow)"/>
-            <text x="20" y="247" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">Jan</text><text x="104" y="247" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">Mar</text><text x="188" y="247" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">May</text><text x="272" y="247" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">Jul</text>
-            <rect x="348" y="76" width="162" height="165" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="358" y="91" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">REGIONS</text>
-            <text x="358" y="110" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">North</text><rect x="390" y="102" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="102" width="106" height="10" rx="2" fill="#38bdf8" opacity=".75"/>
-            <text x="358" y="135" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">South</text><rect x="390" y="127" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="127" width="84" height="10" rx="2" fill="#38bdf8" opacity=".55"/>
-            <text x="358" y="160" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">East</text><rect x="390" y="152" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="152" width="66" height="10" rx="2" fill="#38bdf8" opacity=".4"/>
-            <rect x="0" y="293" width="520" height="17" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="301" r="3" fill="#4dbe6a"/><text x="20" y="304" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">Live · Power BI · Refreshed 2 min ago · 6 regions · 14 reps</text>
-            </svg>
+          <div class="ba-wrap" data-ba="1">
+            <!-- BEFORE: messy spreadsheet -->
+            <div class="ba-before">
+              <div class="ba-before-inner" id="ba1-before">
+                <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                  <rect width="520" height="420" fill="#080f1c"/>
+                  <!-- title bar -->
+                  <rect width="520" height="22" fill="rgba(20,35,55,.95)"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,180,210,.5)" letter-spacing="1">Sales_FINAL_v3_FINAL_USE_THIS.xlsx</text>
+                  <text x="480" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(239,68,68,.6)">⚠ Unsaved</text>
+                  <!-- col headers -->
+                  <rect y="22" width="520" height="18" fill="rgba(25,40,60,.9)"/>
+                  <text x="8" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">A</text>
+                  <text x="78" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">B</text>
+                  <text x="148" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">C</text>
+                  <text x="218" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">D</text>
+                  <text x="288" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">E</text>
+                  <text x="358" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">F</text>
+                  <text x="428" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">G</text>
+                  <!-- rows -->
+                  <!-- row 1 header -->
+                  <rect y="40" width="520" height="18" fill="rgba(255,200,50,.06)"/>
+                  <line x1="0" y1="58" x2="520" y2="58" stroke="rgba(56,80,110,.2)" stroke-width="1"/>
+                  <text x="8" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Region</text>
+                  <text x="78" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Rep Name</text>
+                  <text x="148" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Q1 Sales</text>
+                  <text x="218" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Q2 Sales</text>
+                  <text x="288" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Q3</text>
+                  <text x="358" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Target</text>
+                  <text x="428" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Notes</text>
+                  <!-- data rows -->
+                  <rect y="58" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="76" x2="520" y2="76" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">North</text><text x="78" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">A. Sharma</text><text x="148" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">142000</text><text x="218" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">N/A</text><text x="288" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">168000</text><text x="358" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">150000</text><text x="428" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">check w/ mgr</text>
+                  <rect y="76" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="94" x2="520" y2="94" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">South</text><text x="78" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">B. Patel</text><text x="148" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">98500</text><text x="218" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">112000</text><text x="288" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text><text x="358" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">110000</text>
+                  <rect y="94" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="112" x2="520" y2="112" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">East</text><text x="78" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">C. Mehta</text><text x="148" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">76200</text><text x="218" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">81000</text><text x="288" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">90000</text><text x="358" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">85000</text><text x="428" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">Updated?</text>
+                  <rect y="112" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="130" x2="520" y2="130" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">West</text><text x="78" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">D. Iyer</text><text x="148" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text><text x="218" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">134000</text><text x="288" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">145000</text><text x="358" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">130000</text>
+                  <rect y="130" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="148" x2="520" y2="148" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">North</text><text x="78" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">E. Singh</text><text x="148" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">203000</text><text x="218" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">TBD</text><text x="288" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">218000</text><text x="358" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">200000</text><text x="428" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">old target?</text>
+                  <rect y="148" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="166" x2="520" y2="166" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">South</text><text x="78" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">F. Khan</text><text x="148" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">88000</text><text x="218" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">91000</text><text x="288" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text><text x="358" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">95000</text>
+                  <rect y="166" width="520" height="18" fill="rgba(255,50,50,.04)"/><line x1="0" y1="184" x2="520" y2="184" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="179" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">East</text><text x="78" y="179" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">G. Rao</text><text x="148" y="179" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">N/A</text><text x="218" y="179" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">64000</text><text x="288" y="179" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">71000</text><text x="428" y="179" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">copy from Sheet3</text>
+                  <!-- more rows fading -->
+                  <rect y="184" width="520" height="18" fill="rgba(10,18,32,.3)"/><line x1="0" y1="202" x2="520" y2="202" stroke="rgba(40,65,95,.15)" stroke-width="1"/>
+                  <text x="8" y="197" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">West</text><text x="78" y="197" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">H. Verma</text><text x="148" y="197" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.4)">117000</text><text x="218" y="197" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.5)" font-weight="bold">#N/A</text>
+                  <rect y="202" width="520" height="18" fill="rgba(6,12,22,.2)"/><line x1="0" y1="220" x2="520" y2="220" stroke="rgba(40,65,95,.1)" stroke-width="1"/>
+                  <text x="8" y="215" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.2)">North</text><text x="78" y="215" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.2)">I. Joshi</text><text x="148" y="215" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.2)">155000</text>
+                  <!-- chaos comment boxes -->
+                  <rect x="300" y="62" width="120" height="32" rx="2" fill="rgba(255,230,100,.12)" stroke="rgba(255,220,80,.3)" stroke-width="1"/>
+                  <text x="306" y="74" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,220,80,.9)">⚠ Q2 data missing</text>
+                  <text x="306" y="86" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.7)">— check with ops team</text>
+                  <rect x="180" y="115" width="110" height="26" rx="2" fill="rgba(239,68,68,.1)" stroke="rgba(239,68,68,.3)" stroke-width="1"/>
+                  <text x="186" y="126" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,120,120,.9)">Formula broken!</text>
+                  <text x="186" y="136" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,100,100,.7)">linked to Sheet2</text>
+                  <!-- bottom status -->
+                  <rect y="400" width="520" height="20" fill="rgba(15,25,40,.95)"/>
+                  <text x="8" y="414" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(239,68,68,.7)">⚠ 3 errors · Last saved: 3 days ago · Sheet 1 of 6 · 847 rows</text>
+                  <!-- red overlay tint -->
+                  <rect width="520" height="420" fill="rgba(239,68,68,.02)"/>
+                </svg>
+              </div>
+            </div>
+            <!-- AFTER: Power BI dashboard -->
+            <div class="ba-after">
+              <div class="ba-after-inner">
+                <svg viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs><linearGradient id="ba1_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(56,189,248,.4)"/><stop offset="100%" stop-color="rgba(56,189,248,0)"/></linearGradient><filter id="ba1_glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                  <rect width="520" height="420" fill="#030c18"/>
+                  <!-- top bar -->
+                  <rect width="520" height="22" fill="rgba(4,10,22,.98)"/><rect width="520" height="2" fill="#38bdf8" y="22"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(186,230,253,.6)" letter-spacing="1">SALES PERFORMANCE — LIVE</text>
+                  <circle cx="504" cy="11" r="4" fill="#4dbe6a"/><text x="494" y="15" font-family="IBM Plex Mono" font-size="5" fill="rgba(77,190,106,.8)" text-anchor="end">Live</text>
+                  <!-- KPI cards -->
+                  <rect x="10" y="30" width="115" height="56" rx="3" fill="rgba(56,189,248,.09)" stroke="rgba(56,189,248,.25)" stroke-width="1"/><rect x="10" y="30" width="115" height="2" fill="#38bdf8"/><text x="18" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.7)" letter-spacing="1">TOTAL REVENUE</text><text x="18" y="68" font-family="IBM Plex Mono" font-size="20" fill="#38bdf8" font-weight="bold">$842K</text><text x="18" y="80" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ 34% vs Q3</text>
+                  <rect x="133" y="30" width="115" height="56" rx="3" fill="rgba(56,189,248,.05)" stroke="rgba(56,189,248,.12)" stroke-width="1"/><rect x="133" y="30" width="115" height="2" fill="rgba(56,189,248,.4)"/><text x="141" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.7)" letter-spacing="1">DEALS WON</text><text x="141" y="68" font-family="IBM Plex Mono" font-size="20" fill="#38bdf8" font-weight="bold">186</text><text x="141" y="80" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ +22 this mo.</text>
+                  <rect x="256" y="30" width="115" height="56" rx="3" fill="rgba(77,190,106,.06)" stroke="rgba(77,190,106,.2)" stroke-width="1"/><rect x="256" y="30" width="115" height="2" fill="#4dbe6a"/><text x="264" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.7)" letter-spacing="1">WIN RATE</text><text x="264" y="68" font-family="IBM Plex Mono" font-size="20" fill="#4dbe6a" font-weight="bold">68%</text><text x="264" y="80" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ +8pts YoY</text>
+                  <rect x="379" y="30" width="131" height="56" rx="3" fill="rgba(56,189,248,.05)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><rect x="379" y="30" width="131" height="2" fill="rgba(56,189,248,.25)"/><text x="387" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.7)" letter-spacing="1">AVG DEAL SIZE</text><text x="387" y="68" font-family="IBM Plex Mono" font-size="20" fill="#38bdf8" font-weight="bold">$4.5K</text><text x="387" y="80" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ +12% MoM</text>
+                  <!-- chart -->
+                  <rect x="10" y="94" width="330" height="200" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="110" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">MONTHLY REVENUE TREND</text>
+                  <line x1="20" y1="140" x2="330" y2="140" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/><line x1="20" y1="170" x2="330" y2="170" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/><line x1="20" y1="200" x2="330" y2="200" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/>
+                  <polygon points="20,250 62,242 104,232 146,218 188,200 230,178 272,156 314,140 330,132 330,288 20,288" fill="url(#ba1_g)"/><polyline points="20,250 62,242 104,232 146,218 188,200 230,178 272,156 314,140 330,132" stroke="#38bdf8" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#ba1_glow)"/><circle cx="330" cy="132" r="4.5" fill="#38bdf8" filter="url(#ba1_glow)"/>
+                  <text x="20" y="300" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">Jan</text><text x="104" y="300" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">Mar</text><text x="188" y="300" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">May</text><text x="272" y="300" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.3)" text-anchor="middle">Jul</text>
+                  <!-- regions -->
+                  <rect x="348" y="94" width="162" height="200" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="358" y="110" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">REGIONS</text>
+                  <text x="358" y="130" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">North</text><rect x="390" y="122" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="122" width="106" height="10" rx="2" fill="#38bdf8" opacity=".75"/>
+                  <text x="358" y="155" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">South</text><rect x="390" y="147" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="147" width="84" height="10" rx="2" fill="#38bdf8" opacity=".55"/>
+                  <text x="358" y="180" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">East</text><rect x="390" y="172" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="172" width="66" height="10" rx="2" fill="#38bdf8" opacity=".4"/>
+                  <text x="358" y="205" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">West</text><rect x="390" y="197" width="110" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="390" y="197" width="92" height="10" rx="2" fill="#38bdf8" opacity=".62"/>
+                  <!-- bottom status -->
+                  <rect x="0" y="400" width="520" height="20" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="410" r="3" fill="#4dbe6a"/><text x="20" y="414" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">Live · Power BI · Refreshed 2 min ago · 6 regions · 14 reps · 0 errors</text>
+                </svg>
+              </div>
+            </div>
+            <!-- divider + handle -->
+            <div class="ba-divider" id="ba1-div"></div>
+            <div class="ba-handle" id="ba1-handle"><svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <!-- labels -->
+            <div class="ba-label before">BEFORE</div>
+            <div class="ba-label after">AFTER</div>
+            <div class="ba-hint">← drag to reveal →</div>
           </div>
         </div>
       </div>
@@ -1610,22 +1795,78 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
           <a href="#contact" class="dscene-cta">Build a Similar Dashboard &rarr;</a>
         </div>
         <div class="dscene-right">
-          <div class="dscene-mockup">
-            <div class="dscene-mockup-bar"><div class="dscene-mockup-dots"><span></span><span></span><span></span></div><div class="dscene-mockup-label">MARKETING ATTRIBUTION</div><div class="dscene-mockup-live"><span class="live"></span>3 Sources</div></div>
-            <svg viewBox="0 0 520 310" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sc2_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(56,189,248,.35)"/><stop offset="100%" stop-color="rgba(56,189,248,0)"/></linearGradient><filter id="sc2_glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <rect width="520" height="310" fill="#030c18"/>
-            <rect x="10" y="10" width="155" height="62" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.35)" stroke-width="1"/><rect x="10" y="10" width="155" height="2" fill="#38bdf8"/><text x="18" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(186,230,253,.8)" letter-spacing="1">META ADS</text><text x="18" y="52" font-family="IBM Plex Mono" font-size="22" fill="#38bdf8" font-weight="bold">4.8x</text><text x="72" y="52" font-family="IBM Plex Mono" font-size="10" fill="rgba(56,189,248,.6)">ROAS</text><text x="18" y="65" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; 62% vs prev month</text>
-            <rect x="173" y="10" width="155" height="62" rx="3" fill="rgba(56,189,248,.04)" stroke="rgba(56,189,248,.12)" stroke-width="1"/><rect x="173" y="10" width="155" height="2" fill="rgba(56,189,248,.3)"/><text x="181" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(186,230,253,.8)" letter-spacing="1">GOOGLE ADS</text><text x="181" y="52" font-family="IBM Plex Mono" font-size="22" fill="rgba(56,189,248,.65)" font-weight="bold">2.1x</text><text x="233" y="52" font-family="IBM Plex Mono" font-size="10" fill="rgba(56,189,248,.4)">ROAS</text><text x="181" y="65" font-family="IBM Plex Mono" font-size="5.5" fill="#f87171">&#9660; 8% vs prev</text>
-            <rect x="336" y="10" width="174" height="62" rx="3" fill="rgba(56,189,248,.03)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><rect x="336" y="10" width="174" height="2" fill="rgba(56,189,248,.12)"/><text x="344" y="24" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(186,230,253,.8)" letter-spacing="1">EMAIL</text><text x="344" y="52" font-family="IBM Plex Mono" font-size="22" fill="rgba(56,189,248,.4)" font-weight="bold">1.4x</text><text x="396" y="52" font-family="IBM Plex Mono" font-size="10" fill="rgba(56,189,248,.25)">ROAS</text>
-            <rect x="10" y="80" width="310" height="170" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="96" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">CHANNEL PERFORMANCE TREND</text>
-            <line x1="20" y1="130" x2="310" y2="130" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/><line x1="20" y1="170" x2="310" y2="170" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/>
-            <polygon points="20,220 62,210 104,195 146,175 188,152 230,130 272,112 310,98 310,235 20,235" fill="url(#sc2_g)"/><polyline points="20,220 62,210 104,195 146,175 188,152 230,130 272,112 310,98" stroke="#38bdf8" stroke-width="2" fill="none" stroke-linecap="round" filter="url(#sc2_glow)"/>
-            <rect x="328" y="80" width="182" height="170" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="338" y="96" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">CAC BY CHANNEL</text>
-            <text x="338" y="118" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">Meta</text><rect x="368" y="110" width="132" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="368" y="110" width="52" height="10" rx="2" fill="#38bdf8" opacity=".8"/><text x="506" y="119" font-family="IBM Plex Mono" font-size="5.5" fill="#38bdf8" text-anchor="end">$18</text>
-            <text x="338" y="142" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">Google</text><rect x="368" y="134" width="132" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="368" y="134" width="96" height="10" rx="2" fill="rgba(56,189,248,.5)"/><text x="506" y="143" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(56,189,248,.7)" text-anchor="end">$34</text>
-            <text x="338" y="166" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">Email</text><rect x="368" y="158" width="132" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="368" y="158" width="28" height="10" rx="2" fill="rgba(56,189,248,.25)"/><text x="506" y="167" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(56,189,248,.4)" text-anchor="end">$11</text>
-            <rect x="0" y="293" width="520" height="17" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="301" r="3" fill="#4dbe6a"/><text x="20" y="304" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">Meta + Google + Email · Multi-touch attribution · CAC &#9660;31%</text>
-            </svg>
+          <div class="ba-wrap" data-ba="2">
+            <div class="ba-before">
+              <div class="ba-before-inner">
+                <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                  <rect width="520" height="420" fill="#080f1c"/>
+                  <rect width="520" height="22" fill="rgba(20,35,55,.95)"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,180,210,.5)" letter-spacing="1">Marketing_Budget_Q3_v2_DRAFT.xlsx</text>
+                  <text x="472" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(239,68,68,.6)">⚠ Unsaved</text>
+                  <rect y="22" width="520" height="18" fill="rgba(25,40,60,.9)"/>
+                  <text x="8" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Channel</text>
+                  <text x="120" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Spend</text>
+                  <text x="190" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Revenue</text>
+                  <text x="270" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">ROAS</text>
+                  <text x="340" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">CAC</text>
+                  <text x="410" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Notes</text>
+                  <!-- rows -->
+                  <rect y="40" width="520" height="18" fill="rgba(255,200,50,.06)"/><line x1="0" y1="58" x2="520" y2="58" stroke="rgba(56,80,110,.2)" stroke-width="1"/>
+                  <text x="8" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Meta Ads</text><text x="120" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$12,400</text><text x="190" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">???</text><text x="270" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text><text x="340" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$18</text><text x="410" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">ask marketing</text>
+                  <rect y="58" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="76" x2="520" y2="76" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Google Search</text><text x="120" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$8,200</text><text x="190" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$17,220</text><text x="270" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">2.1x</text><text x="340" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">$34?</text><text x="410" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">verify w GA4</text>
+                  <rect y="76" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="94" x2="520" y2="94" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Email</text><text x="120" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$1,100</text><text x="190" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text><text x="270" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text><text x="340" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$11</text>
+                  <rect y="94" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="112" x2="520" y2="112" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Google Display</text><text x="120" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$3,600</text><text x="190" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$5,040</text><text x="270" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">1.4x</text><text x="340" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">N/A</text><text x="410" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">overlaps w Meta?</text>
+                  <rect y="112" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="130" x2="520" y2="130" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Influencer</text><text x="120" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">TBD</text><text x="190" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">TBD</text><text x="270" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.4)">TBD</text><text x="410" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">awaiting invoice</text>
+                  <rect y="130" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="148" x2="520" y2="148" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.8)" font-weight="bold">TOTAL</text><text x="120" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text><text x="190" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text>
+                  <!-- comment boxes -->
+                  <rect x="250" y="44" width="130" height="36" rx="2" fill="rgba(255,230,100,.12)" stroke="rgba(255,220,80,.3)" stroke-width="1"/>
+                  <text x="256" y="57" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,220,80,.9)">⚠ Which attribution</text>
+                  <text x="256" y="68" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.7)">model are we using?</text>
+                  <text x="256" y="78" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.5)">last-click? first-click?</text>
+                  <rect x="130" y="78" width="110" height="26" rx="2" fill="rgba(239,68,68,.1)" stroke="rgba(239,68,68,.3)" stroke-width="1"/>
+                  <text x="136" y="89" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,120,120,.9)">Revenue not</text>
+                  <text x="136" y="100" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,100,100,.7)">tracked in Shopify</text>
+                  <rect y="400" width="520" height="20" fill="rgba(15,25,40,.95)"/>
+                  <text x="8" y="414" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(239,68,68,.7)">⚠ 5 errors · Data from 4 different sources · No cross-channel view · 3 people editing</text>
+                  <rect width="520" height="420" fill="rgba(239,68,68,.02)"/>
+                </svg>
+              </div>
+            </div>
+            <div class="ba-after">
+              <div class="ba-after-inner">
+                <svg viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs><linearGradient id="ba2_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(56,189,248,.35)"/><stop offset="100%" stop-color="rgba(56,189,248,0)"/></linearGradient><filter id="ba2_glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                  <rect width="520" height="420" fill="#030c18"/>
+                  <rect width="520" height="22" fill="rgba(4,10,22,.98)"/><rect width="520" height="2" fill="#38bdf8" y="22"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(186,230,253,.6)" letter-spacing="1">MARKETING ATTRIBUTION — LIVE</text>
+                  <circle cx="504" cy="11" r="4" fill="#4dbe6a"/>
+                  <!-- KPI cards -->
+                  <rect x="10" y="30" width="155" height="60" rx="3" fill="rgba(56,189,248,.1)" stroke="rgba(56,189,248,.35)" stroke-width="1"/><rect x="10" y="30" width="155" height="2" fill="#38bdf8"/><text x="18" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(186,230,253,.8)" letter-spacing="1">META ADS</text><text x="18" y="70" font-family="IBM Plex Mono" font-size="22" fill="#38bdf8" font-weight="bold">4.8x</text><text x="72" y="70" font-family="IBM Plex Mono" font-size="10" fill="rgba(56,189,248,.6)">ROAS</text><text x="18" y="83" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ 62% vs prev month</text>
+                  <rect x="173" y="30" width="155" height="60" rx="3" fill="rgba(56,189,248,.04)" stroke="rgba(56,189,248,.12)" stroke-width="1"/><rect x="173" y="30" width="155" height="2" fill="rgba(56,189,248,.3)"/><text x="181" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(186,230,253,.8)" letter-spacing="1">GOOGLE ADS</text><text x="181" y="70" font-family="IBM Plex Mono" font-size="22" fill="rgba(56,189,248,.65)" font-weight="bold">2.1x</text><text x="181" y="83" font-family="IBM Plex Mono" font-size="5.5" fill="#f87171">▼ 8% vs prev</text>
+                  <rect x="336" y="30" width="174" height="60" rx="3" fill="rgba(56,189,248,.03)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><rect x="336" y="30" width="174" height="2" fill="rgba(56,189,248,.12)"/><text x="344" y="44" font-family="IBM Plex Mono" font-size="5" fill="rgba(186,230,253,.8)" letter-spacing="1">EMAIL</text><text x="344" y="70" font-family="IBM Plex Mono" font-size="22" fill="rgba(56,189,248,.4)" font-weight="bold">1.4x</text><text x="344" y="83" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,180,220,.5)">Lowest CAC: $11</text>
+                  <!-- trend chart -->
+                  <rect x="10" y="100" width="310" height="190" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="116" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">CHANNEL PERFORMANCE TREND</text>
+                  <line x1="20" y1="155" x2="310" y2="155" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/><line x1="20" y1="195" x2="310" y2="195" stroke="rgba(56,189,248,.04)" stroke-width="1" stroke-dasharray="3 5"/>
+                  <polygon points="20,250 62,238 104,222 146,200 188,174 230,150 272,128 310,110 310,285 20,285" fill="url(#ba2_g)"/><polyline points="20,250 62,238 104,222 146,200 188,174 230,150 272,128 310,110" stroke="#38bdf8" stroke-width="2" fill="none" stroke-linecap="round" filter="url(#ba2_glow)"/>
+                  <!-- CAC panel -->
+                  <rect x="328" y="100" width="182" height="190" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="338" y="116" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">CAC BY CHANNEL</text>
+                  <text x="338" y="138" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">Meta</text><rect x="368" y="130" width="132" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="368" y="130" width="52" height="10" rx="2" fill="#38bdf8" opacity=".8"/><text x="505" y="139" font-family="IBM Plex Mono" font-size="5.5" fill="#38bdf8" text-anchor="end">$18</text>
+                  <text x="338" y="162" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">Google</text><rect x="368" y="154" width="132" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="368" y="154" width="96" height="10" rx="2" fill="rgba(56,189,248,.5)"/><text x="505" y="163" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(56,189,248,.7)" text-anchor="end">$34</text>
+                  <text x="338" y="186" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">Email</text><rect x="368" y="178" width="132" height="10" rx="2" fill="rgba(56,189,248,.08)"/><rect x="368" y="178" width="28" height="10" rx="2" fill="rgba(56,189,248,.25)"/><text x="505" y="187" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(56,189,248,.4)" text-anchor="end">$11</text>
+                  <rect x="0" y="400" width="520" height="20" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="410" r="3" fill="#4dbe6a"/><text x="20" y="414" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">Meta + Google + Email · Multi-touch attribution · CAC ▼31% · 0 errors</text>
+                </svg>
+              </div>
+            </div>
+            <div class="ba-divider" id="ba2-div"></div>
+            <div class="ba-handle" id="ba2-handle"><svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="ba-label before">BEFORE</div>
+            <div class="ba-label after">AFTER</div>
+            <div class="ba-hint">← drag to reveal →</div>
           </div>
         </div>
       </div>
@@ -1647,20 +1888,71 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
           <a href="#contact" class="dscene-cta">Build a Similar Dashboard &rarr;</a>
         </div>
         <div class="dscene-right">
-          <div class="dscene-mockup">
-            <div class="dscene-mockup-bar"><div class="dscene-mockup-dots"><span></span><span></span><span></span></div><div class="dscene-mockup-label">FINANCIAL REPORTING — CFO SUITE</div><div class="dscene-mockup-live"><span class="live"></span>Live</div></div>
-            <svg viewBox="0 0 520 310" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sc3_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(77,190,106,.25)"/><stop offset="100%" stop-color="rgba(77,190,106,0)"/></linearGradient><filter id="sc3_glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <rect width="520" height="310" fill="#030c18"/>
-            <rect x="10" y="10" width="300" height="140" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="26" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">P&amp;L OVERVIEW — YTD</text>
-            <text x="20" y="50" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">REVENUE</text><text x="20" y="80" font-family="IBM Plex Mono" font-size="28" fill="#38bdf8" font-weight="bold">$2.4M</text><text x="20" y="96" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; 18% YoY — Budget: $2.1M</text>
-            <rect x="20" y="104" width="270" height="6" rx="2" fill="rgba(56,189,248,.08)"/><rect x="20" y="104" width="230" height="6" rx="2" fill="rgba(56,189,248,.5)"/>
-            <text x="20" y="128" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">EXPENSES</text><text x="20" y="148" font-family="IBM Plex Mono" font-size="20" fill="#f87171" font-weight="bold">$1.92M</text><text x="130" y="148" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,190,220,.5)">Budget: $2.0M</text>
-            <rect x="318" y="10" width="192" height="140" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="328" y="26" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">NET PROFIT MARGIN</text>
-            <text x="328" y="85" font-family="IBM Plex Mono" font-size="40" fill="#4dbe6a" font-weight="bold">20%</text><text x="328" y="102" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; 4.2pts YoY</text>
-            <rect x="10" y="158" width="490" height="90" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="174" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">CASH FLOW TREND</text>
-            <polygon points="20,240 75,232 130,234 185,224 240,210 295,196 350,180 405,165 500,140 500,248 20,248" fill="url(#sc3_g)"/><polyline points="20,240 75,232 130,234 185,224 240,210 295,196 350,180 405,165 500,140" stroke="#4dbe6a" stroke-width="2" fill="none" stroke-linecap="round" filter="url(#sc3_glow)"/><circle cx="500" cy="140" r="4" fill="#4dbe6a" filter="url(#sc3_glow)"/>
-            <rect x="0" y="293" width="520" height="17" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="301" r="3" fill="#4dbe6a"/><text x="20" y="304" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">SQL Server · Excel · Auto-refresh nightly · Month-end close &#9660;93%</text>
-            </svg>
+          <div class="ba-wrap" data-ba="3">
+            <div class="ba-before">
+              <div class="ba-before-inner">
+                <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                  <rect width="520" height="420" fill="#080f1c"/>
+                  <rect width="520" height="22" fill="rgba(20,35,55,.95)"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,180,210,.5)" letter-spacing="1">PL_Report_Oct_MANUAL_v7.xlsx</text>
+                  <text x="460" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(239,68,68,.6)">⚠ Unsaved</text>
+                  <rect y="22" width="520" height="18" fill="rgba(25,40,60,.9)"/>
+                  <text x="8" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Category</text><text x="140" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Budget</text><text x="220" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Actual</text><text x="300" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Variance</text><text x="390" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">Notes</text>
+                  <rect y="40" width="520" height="18" fill="rgba(255,200,50,.06)"/><line x1="0" y1="58" x2="520" y2="58" stroke="rgba(56,80,110,.2)" stroke-width="1"/>
+                  <text x="8" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.7)" font-weight="bold">Revenue</text><text x="140" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$2,100,000</text><text x="220" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$2,400,000</text><text x="300" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text>
+                  <rect y="58" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="76" x2="520" y2="76" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">COGS</text><text x="140" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$840,000</text><text x="220" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">TBD</text><text x="300" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">TBD</text><text x="390" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">waiting on ops</text>
+                  <rect y="76" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="94" x2="520" y2="94" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Gross Profit</text><text x="140" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text><text x="220" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text>
+                  <rect y="94" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="112" x2="520" y2="112" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Payroll</text><text x="140" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$620,000</text><text x="220" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$640,000</text><text x="300" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">-20,000</text><text x="390" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">2 new hires</text>
+                  <rect y="112" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="130" x2="520" y2="130" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Marketing</text><text x="140" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$180,000</text><text x="220" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$192,000</text><text x="300" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">-12,000</text><text x="390" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">Q4 campaign</text>
+                  <rect y="130" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="148" x2="520" y2="148" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.7)">Overheads</text><text x="140" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$280,000</text><text x="220" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">N/A</text><text x="390" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(240,160,50,.7)">copy from last month</text>
+                  <rect y="148" width="520" height="18" fill="rgba(255,50,50,.04)"/><line x1="0" y1="166" x2="520" y2="166" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(255,210,80,.8)" font-weight="bold">Net Profit</text><text x="140" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text><text x="220" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#VALUE!</text>
+                  <rect x="290" y="44" width="130" height="36" rx="2" fill="rgba(255,230,100,.12)" stroke="rgba(255,220,80,.3)" stroke-width="1"/>
+                  <text x="296" y="56" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,220,80,.9)">⚠ COGS from Sheet4</text>
+                  <text x="296" y="67" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.7)">needs manual update</text>
+                  <text x="296" y="78" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.5)">takes ~3 days every mo</text>
+                  <rect x="130" y="96" width="110" height="26" rx="2" fill="rgba(239,68,68,.1)" stroke="rgba(239,68,68,.3)" stroke-width="1"/>
+                  <text x="136" y="108" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,120,120,.9)">Gross profit broken</text>
+                  <text x="136" y="118" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,100,100,.7)">fix before board meeting!</text>
+                  <rect y="400" width="520" height="20" fill="rgba(15,25,40,.95)"/>
+                  <text x="8" y="414" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(239,68,68,.7)">⚠ 6 errors · Month-end close: 3 days · 4 spreadsheets · Manual consolidation</text>
+                  <rect width="520" height="420" fill="rgba(239,68,68,.02)"/>
+                </svg>
+              </div>
+            </div>
+            <div class="ba-after">
+              <div class="ba-after-inner">
+                <svg viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs><linearGradient id="ba3_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(77,190,106,.25)"/><stop offset="100%" stop-color="rgba(77,190,106,0)"/></linearGradient><filter id="ba3_glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                  <rect width="520" height="420" fill="#030c18"/>
+                  <rect width="520" height="22" fill="rgba(4,10,22,.98)"/><rect width="520" height="2" fill="#4dbe6a" y="22"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(186,230,253,.6)" letter-spacing="1">FINANCIAL REPORTING — CFO SUITE</text>
+                  <circle cx="504" cy="11" r="4" fill="#4dbe6a"/>
+                  <!-- P&L overview -->
+                  <rect x="10" y="30" width="300" height="145" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="46" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">P&amp;L OVERVIEW — YTD</text>
+                  <text x="20" y="70" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">REVENUE</text><text x="20" y="100" font-family="IBM Plex Mono" font-size="28" fill="#38bdf8" font-weight="bold">$2.4M</text><text x="20" y="116" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ 18% YoY — Budget: $2.1M</text>
+                  <rect x="20" y="124" width="270" height="6" rx="2" fill="rgba(56,189,248,.08)"/><rect x="20" y="124" width="230" height="6" rx="2" fill="rgba(56,189,248,.5)"/>
+                  <text x="20" y="148" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">EXPENSES</text><text x="20" y="168" font-family="IBM Plex Mono" font-size="20" fill="#f87171" font-weight="bold">$1.92M</text><text x="130" y="168" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(150,190,220,.5)">Budget: $2.0M ✓</text>
+                  <!-- net profit -->
+                  <rect x="318" y="30" width="192" height="145" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="328" y="46" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">NET PROFIT</text>
+                  <text x="328" y="105" font-family="IBM Plex Mono" font-size="40" fill="#4dbe6a" font-weight="bold">20%</text><text x="328" y="122" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ 4.2pts YoY</text>
+                  <!-- cashflow -->
+                  <rect x="10" y="183" width="490" height="105" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="199" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">CASH FLOW TREND</text>
+                  <polygon points="20,272 75,264 130,266 185,254 240,238 295,220 350,200 405,182 500,155 500,280 20,280" fill="url(#ba3_g)"/><polyline points="20,272 75,264 130,266 185,254 240,238 295,220 350,200 405,182 500,155" stroke="#4dbe6a" stroke-width="2" fill="none" stroke-linecap="round" filter="url(#ba3_glow)"/><circle cx="500" cy="155" r="4" fill="#4dbe6a" filter="url(#ba3_glow)"/>
+                  <rect x="0" y="400" width="520" height="20" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="410" r="3" fill="#4dbe6a"/><text x="20" y="414" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">SQL Server · Auto-refresh nightly · Month-end close ▼93% · 0 errors</text>
+                </svg>
+              </div>
+            </div>
+            <div class="ba-divider" id="ba3-div"></div>
+            <div class="ba-handle" id="ba3-handle"><svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="ba-label before">BEFORE</div>
+            <div class="ba-label after">AFTER</div>
+            <div class="ba-hint">← drag to reveal →</div>
           </div>
         </div>
       </div>
@@ -1682,24 +1974,74 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
           <a href="#contact" class="dscene-cta">Build a Similar Dashboard &rarr;</a>
         </div>
         <div class="dscene-right">
-          <div class="dscene-mockup">
-            <div class="dscene-mockup-bar"><div class="dscene-mockup-dots"><span></span><span></span><span></span></div><div class="dscene-mockup-label">CUSTOMER ANALYTICS + RFM</div><div class="dscene-mockup-live"><span class="live"></span>Segmented</div></div>
-            <svg viewBox="0 0 520 310" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><filter id="sc4_glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <rect width="520" height="310" fill="#030c18"/>
-            <rect x="10" y="10" width="210" height="225" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="26" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">RFM SEGMENTS</text>
-            <circle cx="115" cy="130" r="70" stroke="rgba(56,189,248,.07)" stroke-width="24" fill="none"/><circle cx="115" cy="130" r="70" stroke="#38bdf8" stroke-width="24" fill="none" stroke-dasharray="197 440" stroke-dashoffset="0"/><circle cx="115" cy="130" r="70" stroke="rgba(56,189,248,.5)" stroke-width="24" fill="none" stroke-dasharray="123 440" stroke-dashoffset="-197"/><circle cx="115" cy="130" r="70" stroke="rgba(248,113,113,.5)" stroke-width="24" fill="none" stroke-dasharray="88 440" stroke-dashoffset="-320"/>
-            <text x="115" y="124" font-family="IBM Plex Mono" font-size="26" fill="#38bdf8" text-anchor="middle" font-weight="bold">67%</text><text x="115" y="142" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(186,230,253,.8)" text-anchor="middle">Retention</text>
-            <rect x="20" y="218" width="10" height="10" fill="#38bdf8" rx="1"/><text x="34" y="227" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.85)">Champions 45%</text>
-            <rect x="120" y="218" width="10" height="10" fill="rgba(248,113,113,.5)" rx="1"/><text x="134" y="227" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.85)">At-Risk 20%</text>
-            <rect x="228" y="10" width="282" height="110" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="238" y="26" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">KEY METRICS</text>
-            <text x="238" y="50" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">AVG LTV</text><text x="238" y="84" font-family="IBM Plex Mono" font-size="28" fill="#38bdf8" font-weight="bold">$1,240</text><text x="238" y="99" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9650; 22% since segmentation</text>
-            <text x="380" y="50" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">CHURN</text><text x="380" y="80" font-family="IBM Plex Mono" font-size="24" fill="#f87171" font-weight="bold">18.4%</text><text x="380" y="99" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">&#9660; 9pts since launch</text>
-            <rect x="228" y="128" width="282" height="107" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="238" y="144" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">COHORT RETENTION</text>
-            <rect x="238" y="154" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="154" width="246" height="16" rx="2" fill="rgba(56,189,248,.55)"/><text x="240" y="166" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(4,10,22,.9)" font-weight="bold">M0 — 100%</text>
-            <rect x="238" y="176" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="176" width="196" height="16" rx="2" fill="rgba(56,189,248,.4)"/><text x="240" y="188" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">M1 — 75%</text>
-            <rect x="238" y="198" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="198" width="157" height="16" rx="2" fill="rgba(56,189,248,.28)"/><text x="240" y="210" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.7)">M2 — 60%</text>
-            <rect x="0" y="293" width="520" height="17" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="301" r="3" fill="#4dbe6a"/><text x="20" y="304" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">E-commerce · RFM + LTV · Churn scoring · Retention &#9650;41% in 90 days</text>
-            </svg>
+          <div class="ba-wrap" data-ba="4">
+            <div class="ba-before">
+              <div class="ba-before-inner">
+                <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                  <rect width="520" height="420" fill="#080f1c"/>
+                  <rect width="520" height="22" fill="rgba(20,35,55,.95)"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,180,210,.5)" letter-spacing="1">Customer_Export_Nov_raw_DO_NOT_EDIT.csv</text>
+                  <rect y="22" width="520" height="18" fill="rgba(25,40,60,.9)"/>
+                  <text x="8" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">cust_id</text><text x="80" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">email</text><text x="200" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">orders</text><text x="255" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">total_spend</text><text x="340" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">last_order</text><text x="420" y="35" font-family="IBM Plex Mono" font-size="6" fill="rgba(120,150,185,.5)">segment</text>
+                  <rect y="40" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="58" x2="520" y2="58" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">1001</text><text x="80" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">r.sharma@g...</text><text x="200" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">14</text><text x="255" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$2,840</text><text x="340" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">2024-10-12</text><text x="420" y="53" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">NULL</text>
+                  <rect y="58" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="76" x2="520" y2="76" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">1002</text><text x="80" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">b.patel@hot...</text><text x="200" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">1</text><text x="255" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$89</text><text x="340" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">2023-02-01</text><text x="420" y="71" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">NULL</text>
+                  <rect y="76" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="94" x2="520" y2="94" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">1003</text><text x="80" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">[blank]</text><text x="200" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">7</text><text x="255" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$1,240</text><text x="340" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">???</text><text x="420" y="89" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">NULL</text>
+                  <rect y="94" width="520" height="18" fill="rgba(6,12,22,.4)"/><line x1="0" y1="112" x2="520" y2="112" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">1004</text><text x="80" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">c.mehta@y...</text><text x="200" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#N/A</text><text x="255" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.8)" font-weight="bold">#REF!</text><text x="420" y="107" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">NULL</text>
+                  <rect y="112" width="520" height="18" fill="rgba(10,18,32,.5)"/><line x1="0" y1="130" x2="520" y2="130" stroke="rgba(40,65,95,.2)" stroke-width="1"/>
+                  <text x="8" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">1005</text><text x="80" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.6)">d.iyer@gmai...</text><text x="200" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">22</text><text x="255" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.7)">$5,120</text><text x="340" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.5)">2024-11-01</text><text x="420" y="125" font-family="IBM Plex Mono" font-size="6" fill="rgba(239,68,68,.7)">NULL</text>
+                  <rect y="130" width="520" height="18" fill="rgba(6,12,22,.3)"/><line x1="0" y1="148" x2="520" y2="148" stroke="rgba(40,65,95,.15)" stroke-width="1"/>
+                  <text x="8" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.35)">1006</text><text x="80" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.35)">e.singh@out...</text><text x="200" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.35)">3</text><text x="255" y="143" font-family="IBM Plex Mono" font-size="6" fill="rgba(100,180,120,.35)">$340</text>
+                  <rect y="148" width="520" height="18" fill="rgba(10,18,32,.15)"/>
+                  <text x="8" y="161" font-family="IBM Plex Mono" font-size="6" fill="rgba(160,185,210,.15)">1007 ...</text>
+                  <!-- comment -->
+                  <rect x="310" y="44" width="130" height="48" rx="2" fill="rgba(255,230,100,.12)" stroke="rgba(255,220,80,.3)" stroke-width="1"/>
+                  <text x="316" y="57" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(255,220,80,.9)">⚠ segment col empty</text>
+                  <text x="316" y="68" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.7)">no RFM logic applied</text>
+                  <text x="316" y="79" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.5)">everyone gets same</text>
+                  <text x="316" y="89" font-family="IBM Plex Mono" font-size="5" fill="rgba(255,200,60,.5)">email campaign 😬</text>
+                  <rect y="400" width="520" height="20" fill="rgba(15,25,40,.95)"/>
+                  <text x="8" y="414" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(239,68,68,.7)">⚠ 2,847 rows · 0 segments · Churn invisible · All customers treated equally</text>
+                  <rect width="520" height="420" fill="rgba(239,68,68,.02)"/>
+                </svg>
+              </div>
+            </div>
+            <div class="ba-after">
+              <div class="ba-after-inner">
+                <svg viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs><filter id="ba4_glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                  <rect width="520" height="420" fill="#030c18"/>
+                  <rect width="520" height="22" fill="rgba(4,10,22,.98)"/><rect width="520" height="2" fill="#a78bfa" y="22"/>
+                  <text x="10" y="15" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(186,230,253,.6)" letter-spacing="1">CUSTOMER ANALYTICS + RFM SEGMENTS</text>
+                  <circle cx="504" cy="11" r="4" fill="#4dbe6a"/>
+                  <!-- RFM donut -->
+                  <rect x="10" y="30" width="210" height="240" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="20" y="46" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">RFM SEGMENTS</text>
+                  <circle cx="115" cy="148" r="70" stroke="rgba(56,189,248,.07)" stroke-width="24" fill="none"/><circle cx="115" cy="148" r="70" stroke="#38bdf8" stroke-width="24" fill="none" stroke-dasharray="197 440" stroke-dashoffset="0"/><circle cx="115" cy="148" r="70" stroke="rgba(56,189,248,.5)" stroke-width="24" fill="none" stroke-dasharray="123 440" stroke-dashoffset="-197"/><circle cx="115" cy="148" r="70" stroke="rgba(248,113,113,.5)" stroke-width="24" fill="none" stroke-dasharray="88 440" stroke-dashoffset="-320"/>
+                  <text x="115" y="142" font-family="IBM Plex Mono" font-size="26" fill="#38bdf8" text-anchor="middle" font-weight="bold">67%</text><text x="115" y="160" font-family="IBM Plex Mono" font-size="6.5" fill="rgba(186,230,253,.8)" text-anchor="middle">Retention</text>
+                  <rect x="20" y="238" width="10" height="10" fill="#38bdf8" rx="1"/><text x="34" y="247" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.85)">Champions 45%</text>
+                  <rect x="120" y="238" width="10" height="10" fill="rgba(248,113,113,.5)" rx="1"/><text x="134" y="247" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.85)">At-Risk 20%</text>
+                  <!-- key metrics -->
+                  <rect x="228" y="30" width="282" height="110" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="238" y="46" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">KEY METRICS</text>
+                  <text x="238" y="70" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">AVG LTV</text><text x="238" y="100" font-family="IBM Plex Mono" font-size="28" fill="#38bdf8" font-weight="bold">$1,240</text><text x="238" y="118" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▲ 22% since segmentation</text>
+                  <text x="380" y="70" font-family="IBM Plex Mono" font-size="7" fill="rgba(150,190,220,.6)" letter-spacing="1">CHURN</text><text x="380" y="96" font-family="IBM Plex Mono" font-size="24" fill="#f87171" font-weight="bold">18.4%</text><text x="380" y="118" font-family="IBM Plex Mono" font-size="5.5" fill="#4dbe6a">▼ 9pts since launch</text>
+                  <!-- cohort -->
+                  <rect x="228" y="148" width="282" height="122" rx="3" fill="rgba(4,10,22,.7)" stroke="rgba(56,189,248,.1)" stroke-width="1"/><text x="238" y="164" font-family="IBM Plex Mono" font-size="6" fill="rgba(150,190,220,.55)" letter-spacing="1.5">COHORT RETENTION</text>
+                  <rect x="238" y="172" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="172" width="262" height="16" rx="2" fill="rgba(56,189,248,.55)"/><text x="240" y="184" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(4,10,22,.9)" font-weight="bold">M0 — 100%</text>
+                  <rect x="238" y="194" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="194" width="196" height="16" rx="2" fill="rgba(56,189,248,.4)"/><text x="240" y="206" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.8)">M1 — 75%</text>
+                  <rect x="238" y="216" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="216" width="157" height="16" rx="2" fill="rgba(56,189,248,.28)"/><text x="240" y="228" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.7)">M2 — 60%</text>
+                  <rect x="238" y="238" width="262" height="16" rx="2" fill="rgba(56,189,248,.08)"/><rect x="238" y="238" width="110" height="16" rx="2" fill="rgba(56,189,248,.18)"/><text x="240" y="250" font-family="IBM Plex Mono" font-size="5.5" fill="rgba(200,220,240,.5)">M3 — 42%</text>
+                  <rect x="0" y="400" width="520" height="20" fill="rgba(4,8,20,.9)"/><circle cx="12" cy="410" r="3" fill="#4dbe6a"/><text x="20" y="414" font-family="IBM Plex Mono" font-size="5" fill="rgba(150,190,220,.5)">E-commerce · RFM + LTV · Churn scoring · Retention ▲41% in 90 days</text>
+                </svg>
+              </div>
+            </div>
+            <div class="ba-divider" id="ba4-div"></div>
+            <div class="ba-handle" id="ba4-handle"><svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="ba-label before">BEFORE</div>
+            <div class="ba-label after">AFTER</div>
+            <div class="ba-hint">← drag to reveal →</div>
           </div>
         </div>
       </div>
@@ -2170,13 +2512,13 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
             <div class="rc-ch-val">+91 90998 67128 · Fastest response</div>
           </div>
         </a>
-        <a href="mailto:ashlytics01@gmail.com" class="rc-channel">
+        <a href="mailto:hello@ashlyticss.com" class="rc-channel">
           <div class="rc-ch-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
           <div>
             <div class="rc-ch-label">Email</div>
-            <div class="rc-ch-val">ashlytics01@gmail.com · Reply &lt;24 hrs</div>
+            <div class="rc-ch-val">hello@ashlyticss.com · Reply &lt;24 hrs</div>
           </div>
         </a>
         <a href="https://www.linkedin.com/company/ashlyticss/" target="_blank" class="rc-channel">
@@ -2212,36 +2554,36 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
   <div class="tmarquee-wrap">
     <div class="tmarquee-row">
       <div class="tmarquee-track row1">
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Feb 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Saved 6hrs/week on reporting</div><div class="ttext">Honestly didn't realise how much time we were wasting on manual reports until Ashlyticss built us a live dashboard. Now it's all there when we open our laptops.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rahul Mehta</div><div class="trole">Operations Head &middot; Logistics Co.</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct Feedback</span><span class="tc-date">Jan 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Cut ad waste by 30% in month 1</div><div class="ttext">Ashlyticss set up a marketing attribution dashboard that finally made the picture clear. We paused two channels and ROI was obvious within 30 days.</div><div class="tau"><div class="tav">P</div><div><div class="tname">Priya Shah</div><div class="trole">Marketing Manager &middot; D2C Brand</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn Review</span><span class="tc-date">Mar 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Full delivery in under 5 days</div><div class="ttext">I gave them a brief on Monday and had a working dashboard by Friday. They didn't just build what I asked for &mdash; they built what I actually needed.</div><div class="tau"><div class="tav">A</div><div><div class="tname">Amit Desai</div><div class="trole">Business Owner &middot; Retail Group</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp Feedback</span><span class="tc-date">Nov 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; First dashboard shipped in 48hrs</div><div class="ttext">They turned around a first version in 48 hours. It was clean, well-labelled, and already had the filters I needed. This is the kind of speed I wish more vendors had.</div><div class="tau"><div class="tav">S</div><div><div class="tname">Sanjana Rao</div><div class="trole">Co-founder &middot; SaaS Startup</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email Testimonial</span><span class="tc-date">Dec 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Finance team now fully self-serve</div><div class="ttext">Ashlyticss automated the whole thing &mdash; P&amp;L, cash position, budget vs actuals &mdash; all in one place. The team didn't need training; they just picked it up and ran.</div><div class="tau"><div class="tav">V</div><div><div class="tname">Vikram Nair</div><div class="trole">CFO &middot; Manufacturing SME</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Identified a revenue leak on day 2</div><div class="ttext">Within two days of the dashboard going live, I spotted a product category running at negative margin. That single finding paid for the whole project.</div><div class="tau"><div class="tav">D</div><div><div class="tname">Deepak Chaudhary</div><div class="trole">Director &middot; E-commerce Brand</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Feb 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Saved 6hrs/week on reporting</div><div class="ttext">Honestly didn't realise how much time we were wasting on manual reports until Ashlyticss built us a live dashboard. Now it's all there when we open our laptops.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rahul Mehta</div><div class="trole">Operations Head &middot; Logistics Co.</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct Feedback</span><span class="tc-date">Jan 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Cut ad waste by 30% in month 1</div><div class="ttext">Ashlyticss set up a marketing attribution dashboard that finally made the picture clear. We paused two channels and ROI was obvious within 30 days.</div><div class="tau"><div class="tav">P</div><div><div class="tname">Priya Shah</div><div class="trole">Marketing Manager &middot; D2C Brand</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn Review</span><span class="tc-date">Mar 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Full delivery in under 5 days</div><div class="ttext">I gave them a brief on Monday and had a working dashboard by Friday. They didn't just build what I asked for &mdash; they built what I actually needed.</div><div class="tau"><div class="tav">A</div><div><div class="tname">Amit Desai</div><div class="trole">Business Owner &middot; Retail Group</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp Feedback</span><span class="tc-date">Nov 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ First dashboard shipped in 48hrs</div><div class="ttext">They turned around a first version in 48 hours. It was clean, well-labelled, and already had the filters I needed. This is the kind of speed I wish more vendors had.</div><div class="tau"><div class="tav">S</div><div><div class="tname">Sanjana Rao</div><div class="trole">Co-founder &middot; SaaS Startup</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email Testimonial</span><span class="tc-date">Dec 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Finance team now fully self-serve</div><div class="ttext">Ashlyticss automated the whole thing &mdash; P&amp;L, cash position, budget vs actuals &mdash; all in one place. The team didn't need training; they just picked it up and ran.</div><div class="tau"><div class="tav">V</div><div><div class="tname">Vikram Nair</div><div class="trole">CFO &middot; Manufacturing SME</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Identified a revenue leak on day 2</div><div class="ttext">Within two days of the dashboard going live, I spotted a product category running at negative margin. That single finding paid for the whole project.</div><div class="tau"><div class="tav">D</div><div><div class="tname">Deepak Chaudhary</div><div class="trole">Director &middot; E-commerce Brand</div></div></div></div>
         <!-- duplicates for loop -->
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Feb 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Saved 6hrs/week on reporting</div><div class="ttext">Honestly didn't realise how much time we were wasting on manual reports until Ashlyticss built us a live dashboard. Now it's all there when we open our laptops.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rahul Mehta</div><div class="trole">Operations Head &middot; Logistics Co.</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct Feedback</span><span class="tc-date">Jan 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Cut ad waste by 30% in month 1</div><div class="ttext">Ashlyticss set up a marketing attribution dashboard that finally made the picture clear. We paused two channels and ROI was obvious within 30 days.</div><div class="tau"><div class="tav">P</div><div><div class="tname">Priya Shah</div><div class="trole">Marketing Manager &middot; D2C Brand</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn Review</span><span class="tc-date">Mar 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Full delivery in under 5 days</div><div class="ttext">I gave them a brief on Monday and had a working dashboard by Friday. They didn't just build what I asked for &mdash; they built what I actually needed.</div><div class="tau"><div class="tav">A</div><div><div class="tname">Amit Desai</div><div class="trole">Business Owner &middot; Retail Group</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp Feedback</span><span class="tc-date">Nov 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; First dashboard shipped in 48hrs</div><div class="ttext">They turned around a first version in 48 hours. It was clean, well-labelled, and already had the filters I needed. This is the kind of speed I wish more vendors had.</div><div class="tau"><div class="tav">S</div><div><div class="tname">Sanjana Rao</div><div class="trole">Co-founder &middot; SaaS Startup</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email Testimonial</span><span class="tc-date">Dec 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Finance team now fully self-serve</div><div class="ttext">Ashlyticss automated the whole thing &mdash; P&amp;L, cash position, budget vs actuals &mdash; all in one place. The team didn't need training; they just picked it up and ran.</div><div class="tau"><div class="tav">V</div><div><div class="tname">Vikram Nair</div><div class="trole">CFO &middot; Manufacturing SME</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Identified a revenue leak on day 2</div><div class="ttext">Within two days of the dashboard going live, I spotted a product category running at negative margin. That single finding paid for the whole project.</div><div class="tau"><div class="tav">D</div><div><div class="tname">Deepak Chaudhary</div><div class="trole">Director &middot; E-commerce Brand</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Feb 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Saved 6hrs/week on reporting</div><div class="ttext">Honestly didn't realise how much time we were wasting on manual reports until Ashlyticss built us a live dashboard. Now it's all there when we open our laptops.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rahul Mehta</div><div class="trole">Operations Head &middot; Logistics Co.</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct Feedback</span><span class="tc-date">Jan 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Cut ad waste by 30% in month 1</div><div class="ttext">Ashlyticss set up a marketing attribution dashboard that finally made the picture clear. We paused two channels and ROI was obvious within 30 days.</div><div class="tau"><div class="tav">P</div><div><div class="tname">Priya Shah</div><div class="trole">Marketing Manager &middot; D2C Brand</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn Review</span><span class="tc-date">Mar 2025</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Full delivery in under 5 days</div><div class="ttext">I gave them a brief on Monday and had a working dashboard by Friday. They didn't just build what I asked for &mdash; they built what I actually needed.</div><div class="tau"><div class="tav">A</div><div><div class="tname">Amit Desai</div><div class="trole">Business Owner &middot; Retail Group</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp Feedback</span><span class="tc-date">Nov 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ First dashboard shipped in 48hrs</div><div class="ttext">They turned around a first version in 48 hours. It was clean, well-labelled, and already had the filters I needed. This is the kind of speed I wish more vendors had.</div><div class="tau"><div class="tav">S</div><div><div class="tname">Sanjana Rao</div><div class="trole">Co-founder &middot; SaaS Startup</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email Testimonial</span><span class="tc-date">Dec 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Finance team now fully self-serve</div><div class="ttext">Ashlyticss automated the whole thing &mdash; P&amp;L, cash position, budget vs actuals &mdash; all in one place. The team didn't need training; they just picked it up and ran.</div><div class="tau"><div class="tav">V</div><div><div class="tname">Vikram Nair</div><div class="trole">CFO &middot; Manufacturing SME</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Identified a revenue leak on day 2</div><div class="ttext">Within two days of the dashboard going live, I spotted a product category running at negative margin. That single finding paid for the whole project.</div><div class="tau"><div class="tav">D</div><div><div class="tname">Deepak Chaudhary</div><div class="trole">Director &middot; E-commerce Brand</div></div></div></div>
       </div>
     </div>
     <div class="tmarquee-row">
       <div class="tmarquee-track row2">
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Data pipeline rebuilt in 3 days</div><div class="ttext">Our data was broken across 4 systems. Ashlyticss built a clean pipeline and within a week we had one reliable source of truth feeding our dashboards.</div><div class="tau"><div class="tav">M</div><div><div class="tname">Meera Patel</div><div class="trole">Data Lead &middot; FinTech Startup</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn</span><span class="tc-date">Sep 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Board meetings now start on time</div><div class="ttext">Before Ashlyticss, our board prep took 4 hours. Now I open the dashboard 5 minutes before the meeting and walk in confident. Game changer for us.</div><div class="tau"><div class="tav">K</div><div><div class="tname">Kartik Bhatia</div><div class="trole">CEO &middot; Manufacturing Co.</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp</span><span class="tc-date">Aug 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Churn rate dropped 18%</div><div class="ttext">The customer segmentation work they did for us was sharp. We finally understood our at-risk segment and the churn rate dropped 18% in two months.</div><div class="tau"><div class="tav">N</div><div><div class="tname">Nisha Reddy</div><div class="trole">VP Growth &middot; D2C Fashion</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email</span><span class="tc-date">Jul 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Inventory turns improved 40%</div><div class="ttext">We were always over-stocked on the wrong items. The inventory analytics dashboard showed us exactly where our money was sitting idle. Turns improved 40% in a quarter.</div><div class="tau"><div class="tav">H</div><div><div class="tname">Harish Koul</div><div class="trole">Operations Director &middot; FMCG</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct</span><span class="tc-date">Jun 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Exceeded every expectation</div><div class="ttext">I was skeptical that a small agency could deliver enterprise-grade work. I was wrong. The quality, the speed, and the communication were exceptional from day one.</div><div class="tau"><div class="tav">J</div><div><div class="tname">James Carter</div><div class="trole">CFO &middot; UK-Based Trading Co.</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google</span><span class="tc-date">May 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Would recommend to any founder</div><div class="ttext">If you're a founder running on gut feel and monthly Excel sheets, Ashlyticss is the upgrade you didn't know you needed. I refer them to every founder I meet.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rohan Verma</div><div class="trole">Founder &middot; EdTech Platform</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Data pipeline rebuilt in 3 days</div><div class="ttext">Our data was broken across 4 systems. Ashlyticss built a clean pipeline and within a week we had one reliable source of truth feeding our dashboards.</div><div class="tau"><div class="tav">M</div><div><div class="tname">Meera Patel</div><div class="trole">Data Lead &middot; FinTech Startup</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn</span><span class="tc-date">Sep 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Board meetings now start on time</div><div class="ttext">Before Ashlyticss, our board prep took 4 hours. Now I open the dashboard 5 minutes before the meeting and walk in confident. Game changer for us.</div><div class="tau"><div class="tav">K</div><div><div class="tname">Kartik Bhatia</div><div class="trole">CEO &middot; Manufacturing Co.</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp</span><span class="tc-date">Aug 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Churn rate dropped 18%</div><div class="ttext">The customer segmentation work they did for us was sharp. We finally understood our at-risk segment and the churn rate dropped 18% in two months.</div><div class="tau"><div class="tav">N</div><div><div class="tname">Nisha Reddy</div><div class="trole">VP Growth &middot; D2C Fashion</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email</span><span class="tc-date">Jul 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Inventory turns improved 40%</div><div class="ttext">We were always over-stocked on the wrong items. The inventory analytics dashboard showed us exactly where our money was sitting idle. Turns improved 40% in a quarter.</div><div class="tau"><div class="tav">H</div><div><div class="tname">Harish Koul</div><div class="trole">Operations Director &middot; FMCG</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct</span><span class="tc-date">Jun 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Exceeded every expectation</div><div class="ttext">I was skeptical that a small agency could deliver enterprise-grade work. I was wrong. The quality, the speed, and the communication were exceptional from day one.</div><div class="tau"><div class="tav">J</div><div><div class="tname">James Carter</div><div class="trole">CFO &middot; UK-Based Trading Co.</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google</span><span class="tc-date">May 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Would recommend to any founder</div><div class="ttext">If you're a founder running on gut feel and monthly Excel sheets, Ashlyticss is the upgrade you didn't know you needed. I refer them to every founder I meet.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rohan Verma</div><div class="trole">Founder &middot; EdTech Platform</div></div></div></div>
         <!-- duplicates -->
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Data pipeline rebuilt in 3 days</div><div class="ttext">Our data was broken across 4 systems. Ashlyticss built a clean pipeline and within a week we had one reliable source of truth feeding our dashboards.</div><div class="tau"><div class="tav">M</div><div><div class="tname">Meera Patel</div><div class="trole">Data Lead &middot; FinTech Startup</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn</span><span class="tc-date">Sep 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Board meetings now start on time</div><div class="ttext">Before Ashlyticss, our board prep took 4 hours. Now I open the dashboard 5 minutes before the meeting and walk in confident. Game changer for us.</div><div class="tau"><div class="tav">K</div><div><div class="tname">Kartik Bhatia</div><div class="trole">CEO &middot; Manufacturing Co.</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp</span><span class="tc-date">Aug 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Churn rate dropped 18%</div><div class="ttext">The customer segmentation work they did for us was sharp. We finally understood our at-risk segment and the churn rate dropped 18% in two months.</div><div class="tau"><div class="tav">N</div><div><div class="tname">Nisha Reddy</div><div class="trole">VP Growth &middot; D2C Fashion</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email</span><span class="tc-date">Jul 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Inventory turns improved 40%</div><div class="ttext">We were always over-stocked on the wrong items. The inventory analytics dashboard showed us exactly where our money was sitting idle. Turns improved 40% in a quarter.</div><div class="tau"><div class="tav">H</div><div><div class="tname">Harish Koul</div><div class="trole">Operations Director &middot; FMCG</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct</span><span class="tc-date">Jun 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Exceeded every expectation</div><div class="ttext">I was skeptical that a small agency could deliver enterprise-grade work. I was wrong. The quality, the speed, and the communication were exceptional from day one.</div><div class="tau"><div class="tav">J</div><div><div class="tname">James Carter</div><div class="trole">CFO &middot; UK-Based Trading Co.</div></div></div></div>
-        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google</span><span class="tc-date">May 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">&#9660; Would recommend to any founder</div><div class="ttext">If you're a founder running on gut feel and monthly Excel sheets, Ashlyticss is the upgrade you didn't know you needed. I refer them to every founder I meet.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rohan Verma</div><div class="trole">Founder &middot; EdTech Platform</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google Review</span><span class="tc-date">Oct 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Data pipeline rebuilt in 3 days</div><div class="ttext">Our data was broken across 4 systems. Ashlyticss built a clean pipeline and within a week we had one reliable source of truth feeding our dashboards.</div><div class="tau"><div class="tav">M</div><div><div class="tname">Meera Patel</div><div class="trole">Data Lead &middot; FinTech Startup</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">LinkedIn</span><span class="tc-date">Sep 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Board meetings now start on time</div><div class="ttext">Before Ashlyticss, our board prep took 4 hours. Now I open the dashboard 5 minutes before the meeting and walk in confident. Game changer for us.</div><div class="tau"><div class="tav">K</div><div><div class="tname">Kartik Bhatia</div><div class="trole">CEO &middot; Manufacturing Co.</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">WhatsApp</span><span class="tc-date">Aug 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Churn rate dropped 18%</div><div class="ttext">The customer segmentation work they did for us was sharp. We finally understood our at-risk segment and the churn rate dropped 18% in two months.</div><div class="tau"><div class="tav">N</div><div><div class="tname">Nisha Reddy</div><div class="trole">VP Growth &middot; D2C Fashion</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Email</span><span class="tc-date">Jul 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Inventory turns improved 40%</div><div class="ttext">We were always over-stocked on the wrong items. The inventory analytics dashboard showed us exactly where our money was sitting idle. Turns improved 40% in a quarter.</div><div class="tau"><div class="tav">H</div><div><div class="tname">Harish Koul</div><div class="trole">Operations Director &middot; FMCG</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Direct</span><span class="tc-date">Jun 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Exceeded every expectation</div><div class="ttext">I was skeptical that a small agency could deliver enterprise-grade work. I was wrong. The quality, the speed, and the communication were exceptional from day one.</div><div class="tau"><div class="tav">J</div><div><div class="tname">James Carter</div><div class="trole">CFO &middot; UK-Based Trading Co.</div></div></div></div>
+        <div class="tc"><div class="tc-meta"><span class="tc-platform">Google</span><span class="tc-date">May 2024</span></div><div class="tstars"><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span></div><div class="tc-highlight">✦ Would recommend to any founder</div><div class="ttext">If you're a founder running on gut feel and monthly Excel sheets, Ashlyticss is the upgrade you didn't know you needed. I refer them to every founder I meet.</div><div class="tau"><div class="tav">R</div><div><div class="tname">Rohan Verma</div><div class="trole">Founder &middot; EdTech Platform</div></div></div></div>
       </div>
     </div>
   </div>
@@ -2371,7 +2713,7 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
         <div class="footer-col-title">Contact</div>
         <div class="footer-contact-list">
           <a href="tel:+919099867128" class="footer-contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.93 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.88 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+91 90998 67128</a>
-          <a href="mailto:ashlytics01@gmail.com" class="footer-contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>ashlytics01@gmail.com</a>
+          <a href="mailto:hello@ashlyticss.com" class="footer-contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>hello@ashlyticss.com</a>
           <div class="footer-contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Ahmedabad, Gujarat, India</div>
         </div>
       </div>
@@ -2384,70 +2726,139 @@ document.querySelectorAll('.svc-tab').forEach(function(t, i) {
 </footer>
 
 <script>
-// HERO 3D TILT
+// HERO 3D TILT — rAF throttled
 (function(){
   var tilt=document.querySelector('.h-tilt');
   var hero=document.getElementById('hero');
   if(!tilt||!hero)return;
+  var dx=0,dy=0,pending=false;
   hero.addEventListener('mousemove',function(e){
     var r=tilt.getBoundingClientRect();
-    var cx=r.left+r.width/2, cy=r.top+r.height/2;
-    var dx=(e.clientX-cx)/r.width, dy=(e.clientY-cy)/r.height;
-    tilt.style.transform='perspective(1200px) rotateY('+(-dx*10-2)+'deg) rotateX('+(dy*5+2)+'deg)';
+    dx=(e.clientX-(r.left+r.width/2))/r.width;
+    dy=(e.clientY-(r.top+r.height/2))/r.height;
+    if(!pending){pending=true;requestAnimationFrame(function(){
+      tilt.style.transform='perspective(1200px) rotateY('+(-dx*10-2)+'deg) rotateX('+(dy*5+2)+'deg)';
+      pending=false;
+    });}
   });
   hero.addEventListener('mouseleave',function(){
     tilt.style.transform='perspective(1200px) rotateY(-8deg) rotateX(4deg)';
   });
 })();
 
-// PARTICLE CANVAS
-var canvas=document.getElementById('pc'),ctx=canvas.getContext('2d'),W,H,pts=[];
-function rsz(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-rsz();window.addEventListener('resize',rsz);
-for(var i=0;i<55;i++)pts.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:Math.random()*1.4+.3,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,a:Math.random()*.45+.1,g:Math.random()>.55});
-function draw(){
-  ctx.clearRect(0,0,W,H);
-  pts.forEach(function(p){
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=p.g?'rgba(56,189,248,'+p.a+')':'rgba(186,230,253,'+(p.a*.35)+')';
-    ctx.fill();p.x+=p.vx;p.y+=p.vy;
-    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-  });
-  for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){
-    var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(56,189,248,'+(0.06*(1-d/110))+')';ctx.lineWidth=.5;ctx.stroke();}
+// PARTICLE CANVAS — fully optimised
+(function(){
+  var pc=document.getElementById('pc');
+  if(!pc)return;
+  var pctx=pc.getContext('2d',{alpha:true,desynchronized:true});
+  var PW,PH,pts=[],dpr=Math.min(window.devicePixelRatio||1,2);
+  var isMobile=window.matchMedia('(max-width:768px)').matches;
+  var count=isMobile?22:45;
+  function prsz(){
+    PW=window.innerWidth;PH=window.innerHeight;
+    pc.width=Math.round(PW*dpr);pc.height=Math.round(PH*dpr);
+    pc.style.width=PW+'px';pc.style.height=PH+'px';
+    pctx.scale(dpr,dpr);
   }
-  requestAnimationFrame(draw);
-}
-draw();
+  prsz();
+  var prsz_t;window.addEventListener('resize',function(){clearTimeout(prsz_t);prsz_t=setTimeout(function(){prsz();pctx.scale(1,1);prsz();},200);},{passive:true});
+  for(var i=0;i<count;i++)pts.push({x:Math.random()*PW,y:Math.random()*PH,r:Math.random()*1.2+.3,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,a:Math.random()*.3+.07,g:Math.random()>.55});
+  var frameCount=0;
+  var paused=false;
+  // Pause when tab hidden
+  document.addEventListener('visibilitychange',function(){paused=document.hidden;if(!paused)requestAnimationFrame(pdraw);});
+  var connFreq=isMobile?4:2; // reduce connection drawing on mobile
+  function pdraw(){
+    if(paused)return;
+    pctx.clearRect(0,0,PW,PH);
+    var len=pts.length;
+    for(var i=0;i<len;i++){
+      var p=pts[i];
+      pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,6.2832);
+      pctx.fillStyle=p.g?'rgba(56,189,248,'+p.a+')':'rgba(186,230,253,'+(p.a*.3)+')';
+      pctx.fill();p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=PW;else if(p.x>PW)p.x=0;
+      if(p.y<0)p.y=PH;else if(p.y>PH)p.y=0;
+    }
+    // Draw connections at reduced frequency
+    if(frameCount%connFreq===0){
+      for(var i=0;i<len;i++){
+        for(var j=i+1;j<len;j++){
+          var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,dd=dx*dx+dy*dy;
+          if(dd<9000){
+            var d=Math.sqrt(dd);
+            pctx.beginPath();pctx.moveTo(pts[i].x,pts[i].y);pctx.lineTo(pts[j].x,pts[j].y);
+            pctx.strokeStyle='rgba(56,189,248,'+(0.048*(1-d/95))+')';pctx.lineWidth=.5;pctx.stroke();
+          }
+        }
+      }
+    }
+    frameCount++;
+    requestAnimationFrame(pdraw);
+  }
+  pdraw();
+})();
 
-// CUSTOM CURSOR
+// CUSTOM CURSOR — transform-only for compositor-thread perf
 if(window.matchMedia('(hover:hover)').matches){
-  var cur=document.getElementById('cur'),cring=document.getElementById('cring'),mx=window.innerWidth/2,my=window.innerHeight/2,tx=mx,ty=my;
-  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
-  (function ac(){cur.style.left=mx+'px';cur.style.top=my+'px';tx+=(mx-tx)*.11;ty+=(my-ty)*.11;cring.style.left=tx+'px';cring.style.top=ty+'px';requestAnimationFrame(ac);})();
+  var cur=document.getElementById('cur'),cring=document.getElementById('cring');
+  var mx=window.innerWidth/2,my=window.innerHeight/2,tx=mx,ty=my;
+  cur.style.left='0';cur.style.top='0';
+  cring.style.left='0';cring.style.top='0';
+  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;},{passive:true});
+  (function ac(){
+    cur.style.transform='translate(calc('+mx+'px - 50%), calc('+my+'px - 50%)) scale('+(document.body.classList.contains('hov')?1.7:1)+')';
+    tx+=(mx-tx)*.12;ty+=(my-ty)*.12;
+    cring.style.transform='translate(calc('+tx+'px - 50%), calc('+ty+'px - 50%)) scale('+(document.body.classList.contains('hov')?1.6:1)+')';
+    requestAnimationFrame(ac);
+  })();
   document.querySelectorAll('a,button,.svc,.tc,.wc,.pstep,.strrow,.gind').forEach(function(el){
-    el.addEventListener('mouseenter',function(){document.body.classList.add('hov');});
-    el.addEventListener('mouseleave',function(){document.body.classList.remove('hov');});
+    el.addEventListener('mouseenter',function(){document.body.classList.add('hov');},{passive:true});
+    el.addEventListener('mouseleave',function(){document.body.classList.remove('hov');},{passive:true});
   });
 }
 
-// SCROLL PROGRESS BAR
+// NAV SCROLL — passive + rAF throttled
+var nb=document.getElementById('nb');
 var spbar=document.getElementById('spbar');
+var scrollPending=false;
 window.addEventListener('scroll',function(){
-  var pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
-  spbar.style.width=Math.min(pct,100)+'%';
+  if(scrollPending)return;
+  scrollPending=true;
+  requestAnimationFrame(function(){
+    var sy=window.scrollY;
+    nb.classList.toggle('s',sy>60);
+    if(spbar){
+      var pct=(sy/(document.documentElement.scrollHeight-window.innerHeight))*100;
+      spbar.style.width=Math.min(pct,100)+'%';
+    }
+    scrollPending=false;
+  });
 },{passive:true});
 
-// NAV SCROLL
-var nb=document.getElementById('nb');
-window.addEventListener('scroll',function(){nb.classList.toggle('s',window.scrollY>60);});
+// HAMBURGER — with body scroll lock + animated bars
+var hamBtn=document.getElementById('ham');
+var mnavEl=document.getElementById('mn');
+hamBtn.addEventListener('click',function(){
+  mnavEl.classList.add('open');
+  hamBtn.classList.add('open');
+  document.body.style.overflow='hidden';
+});
+// update all mobile nav close buttons to also unlock scroll
+document.querySelectorAll('#mn .mcls, #mclsBtn, #mn a').forEach(function(el){
+  el.addEventListener('click',function(){
+    mnavEl.classList.remove('open');
+    hamBtn.classList.remove('open');
+    document.body.style.overflow='';
+  });
+});
 
-// HAMBURGER
-document.getElementById('ham').addEventListener('click',function(){document.getElementById('mn').classList.add('open');});
-
-// INTERSECTION OBSERVER
-var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('v');});},{threshold:.08});
+// INTERSECTION OBSERVER — single shared observer, staggered via CSS delay
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('v');obs.unobserve(e.target);}
+  });
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
 
 // PIPELINE PROCESS SECTION
 function pnodeClick(el){
@@ -2464,10 +2875,10 @@ function pnodeClick(el){
   var cycleTimer=null;
   var cycleStep=1;
   var started=false;
+  var userInteracted=false;
   function startCycle(){
-    if(started)return;
+    if(started||userInteracted)return;
     started=true;
-    // Fill the line immediately on first visible step
     var fill=document.getElementById('pFill');
     if(fill){setTimeout(function(){fill.style.width='0%';},100);}
     cycleTimer=setInterval(function(){
@@ -2476,15 +2887,19 @@ function pnodeClick(el){
       if(node)pnodeClick(node);
     },3200);
   }
+  function stopCycle(){
+    if(cycleTimer){clearInterval(cycleTimer);cycleTimer=null;started=false;}
+  }
   var io=new IntersectionObserver(function(entries){
     if(entries[0].isIntersecting){startCycle();}
-    else{if(cycleTimer){clearInterval(cycleTimer);cycleTimer=null;started=false;}}
+    else{stopCycle();}
   },{threshold:0.3});
   io.observe(section);
-  // Stop auto-cycle on manual click
+  // Stop auto-cycle on manual click — permanently
   document.querySelectorAll('.pnode').forEach(function(n){
     n.addEventListener('click',function(){
-      if(cycleTimer){clearInterval(cycleTimer);cycleTimer=null;started=false;}
+      userInteracted=true;
+      stopCycle();
     });
   });
 })();
@@ -2500,27 +2915,41 @@ document.querySelectorAll('.faq-item').forEach(function(el){obs2.observe(el);});
 document.querySelectorAll('.wc').forEach(function(w,i){w.style.transitionDelay=(i*.1)+'s';});
 document.querySelectorAll('.gind').forEach(function(g,i){g.style.transitionDelay=(i*.05)+'s';});
 
-// COUNTER ANIMATION
+// COUNTER ANIMATION — smooth eased version
 var cobs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){
     if(!e.isIntersecting)return;
     var el=e.target.querySelector('.snum');
     if(!el||el.dataset.done)return;
     el.dataset.done='1';
-    var t=+el.dataset.t,s=el.dataset.s||'',n=0;
-    (function step(){n=Math.min(n+Math.ceil(t/28),t);el.textContent=n+s;if(n<t)requestAnimationFrame(step);})();
+    var target=+el.dataset.t,suffix=el.dataset.s||'';
+    var duration=1800,start=performance.now();
+    function step(now){
+      var progress=Math.min((now-start)/duration,1);
+      var ease=1-Math.pow(1-progress,4); // quartic ease-out
+      var cur=Math.round(ease*target);
+      el.textContent=cur+suffix;
+      if(progress<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   });
 },{threshold:.5});
 document.querySelectorAll('.si').forEach(function(el){cobs.observe(el);});
 document.querySelectorAll('.rev,.si,.svc,.wc,.tc,.aimg,.atxt,.cform,.cform-side,.founder-photo-wrap,.gind,.roi-left,.roi-right,.faq-item').forEach(function(el){obs.observe(el);});
 
-// SERVICE CARD GLOW
+// SERVICE CARD GLOW — rAF throttled
 document.querySelectorAll('.svc').forEach(function(c){
+  var pending=false;
   c.addEventListener('mousemove',function(e){
-    var r=c.getBoundingClientRect();
-    c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-    c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-  });
+    if(pending)return;
+    pending=true;
+    requestAnimationFrame(function(){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+      pending=false;
+    });
+  },{passive:true});
 });
 
 // TECH TABS
@@ -2538,11 +2967,17 @@ function switchT(btn,id){
 // BUTTON MAGNETIC EFFECT
 if(window.matchMedia('(hover:hover)').matches){
   document.querySelectorAll('.bpri,.bsec').forEach(function(b){
+    var pending=false;
     b.addEventListener('mousemove',function(e){
-      var r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
-      b.style.transform='translate('+(e.clientX-cx)*.22+'px,'+(e.clientY-cy)*.3+'px)';
-    });
-    b.addEventListener('mouseleave',function(){b.style.transform='';});
+      if(pending)return;
+      pending=true;
+      requestAnimationFrame(function(){
+        var r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+        b.style.transform='translate('+(e.clientX-cx)*.22+'px,'+(e.clientY-cy)*.3+'px)';
+        pending=false;
+      });
+    },{passive:true});
+    b.addEventListener('mouseleave',function(){b.style.transform='';},{passive:true});
   });
 }
 
@@ -2922,7 +3357,7 @@ function submitAudit(){
   }
   btn.querySelector('span').textContent='Sending…';btn.disabled=true;
   emailjs.send('service_mml189p','template_1lpp3n4',{
-    to_email:'ashlytics01@gmail.com',
+    to_email:'hello@ashlyticss.com',
     subject:'Free Data Audit: '+name+(company?' ('+company+')':''),
     from_name:name,from_email:email,reply_to:email,
     company:company||'Not provided',services:'Free Data Audit',
@@ -2964,13 +3399,18 @@ document.addEventListener('click',function(e){
   var mn=document.getElementById('mn');
   if(mn.classList.contains('open')&&!mn.contains(e.target)&&e.target!==document.getElementById('ham')){
     mn.classList.remove('open');
+    document.body.style.overflow='';
   }
 });
 
 // TRAP FOCUS in mobile nav when open
 document.getElementById('mn').addEventListener('keydown',function(e){
   if(!this.classList.contains('open'))return;
-  if(e.key==='Escape'){this.classList.remove('open');document.getElementById('ham').focus();}
+  if(e.key==='Escape'){
+    this.classList.remove('open');
+    document.body.style.overflow='';
+    document.getElementById('ham').focus();
+  }
 });
 (function(){
   var rs1=document.getElementById('rs1'),rs2=document.getElementById('rs2'),rs3=document.getElementById('rs3'),rs4=document.getElementById('rs4');
@@ -3035,7 +3475,76 @@ document.getElementById('mn').addEventListener('keydown',function(e){
   sceneEls.forEach(function(el){ io.observe(el); });
 })();
 
-// MULTI-STEP FORM (legacy — kept for reference)
+// BEFORE/AFTER DRAG SLIDERS
+(function(){
+  document.querySelectorAll('.ba-wrap').forEach(function(wrap){
+    var before = wrap.querySelector('.ba-before');
+    var divider = wrap.querySelector('.ba-divider');
+    var handle = wrap.querySelector('.ba-handle');
+    var dragging = false;
+    var rafId = null;
+    var pendingPct = null;
+    var rect = null;
+
+    function setPos(pct){
+      pct = Math.max(5, Math.min(95, pct));
+      var r = (100 - pct).toFixed(4);
+      before.style.clipPath = 'inset(0 ' + r + '% 0 0)';
+      divider.style.left = pct + '%';
+      handle.style.left = pct + '%';
+    }
+
+    function flush(){
+      rafId = null;
+      if(pendingPct !== null){ setPos(pendingPct); pendingPct = null; }
+    }
+
+    function scheduleSet(pct){
+      pendingPct = pct;
+      if(!rafId) rafId = requestAnimationFrame(flush);
+    }
+
+    function getX(e){ return e.touches ? e.touches[0].clientX : e.clientX; }
+
+    function onMove(e){
+      if(!dragging) return;
+      e.preventDefault();
+      var pct = ((getX(e) - rect.left) / rect.width) * 100;
+      scheduleSet(pct);
+    }
+
+    function onUp(){
+      dragging = false;
+      rect = null;
+      wrap.classList.remove('dragging');
+    }
+
+    handle.addEventListener('mousedown', function(e){
+      dragging = true;
+      rect = wrap.getBoundingClientRect();
+      wrap.classList.add('dragging');
+      e.preventDefault();
+    });
+    handle.addEventListener('touchstart', function(e){
+      dragging = true;
+      rect = wrap.getBoundingClientRect();
+      wrap.classList.add('dragging');
+    }, {passive:true});
+
+    window.addEventListener('mousemove', onMove, {passive:false});
+    window.addEventListener('touchmove', onMove, {passive:false});
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchend', onUp);
+
+    wrap.addEventListener('click', function(e){
+      var r = wrap.getBoundingClientRect();
+      setPos(((e.clientX - r.left) / r.width) * 100);
+    });
+
+    setPos(50);
+  });
+})();
+
 var msfCurrent=1;
 function msfGoTo(n){
   document.querySelector('.msf-step.active').classList.remove('active');
@@ -3066,9 +3575,10 @@ function msfSubmit(){
   if(msfSubmit.sending)return;
   msfSubmit.sending=true;
   if(typeof emailjs!=='undefined'){
-    console.log('EmailJS sending with payload:',{to_email:'ashlytics01@gmail.com',from_name:name,from_email:email,subject:'New Enquiry from '+name});
+    console.log('EmailJS sending with payload:',{to_email:'hello@ashlyticss.com',from_name:name,from_email:email,subject:'New Enquiry from '+name});
+    var submitBtn=document.querySelector('#msfWrap .msf-next, .msf-step.active button');
     emailjs.send('service_mml189p','template_1lpp3n4',{
-      to_email:'ashlytics01@gmail.com',
+      to_email:'hello@ashlyticss.com',
       subject:'New Enquiry: '+name+(company?' ('+company+')':''),
       from_name:name,
       from_email:email,
@@ -3082,12 +3592,32 @@ function msfSubmit(){
     },function(err){
       console.error('EmailJS FAILED:',JSON.stringify(err));
       alert('Something went wrong. Please message us on WhatsApp instead.');
-      btn.querySelector('span').textContent='Try Again';btn.disabled=false;
+      msfSubmit.sending=false;
     });
   } else {
     hide();
   }
 }
+
+// SMOOTH ANCHOR SCROLL — offset for fixed nav height
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var id=this.getAttribute('href');
+    if(id==='#'||id==='#!')return;
+    var target=document.querySelector(id);
+    if(!target)return;
+    e.preventDefault();
+    var nb2=document.getElementById('nb');
+    var offset=nb2?nb2.offsetHeight+16:80;
+    var top=target.getBoundingClientRect().top+window.scrollY-offset;
+    window.scrollTo({top:top,behavior:'smooth'});
+  });
+});
+
+// STAGGER grid children for cascade entrance
+document.querySelectorAll('.sgrid .svc').forEach(function(el,i){el.style.transitionDelay=(i*0.07)+'s';});
+document.querySelectorAll('.pipeline-steps .pstep').forEach(function(el,i){el.style.transitionDelay=(i*0.08)+'s';});
+
 </script>
 </body>
 </html>
