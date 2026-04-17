@@ -8,7 +8,7 @@
 <meta name="description" content="Ashlyticss helps growing businesses make faster, smarter decisions through Power BI dashboards, sales analytics, marketing analytics, and data engineering. Based in Ahmedabad, serving clients globally.">
 <meta property="og:title" content="Ashlyticss — Data Analytics Agency">
 <meta property="og:description" content="From scattered spreadsheets to real-time dashboards. Power BI experts serving businesses globally.">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" onload="emailjs.init('XGBbyKXrxZ8LqTnKP');console.log('EmailJS loaded & initialised');" onerror="console.error('EmailJS SDK failed to load');"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" onload="emailjs.init({publicKey:'o_XE4MKTt5m61GLYL'});console.log('EmailJS loaded & initialised');" onerror="console.error('EmailJS SDK failed to load');"></script>
 <link rel="canonical" href="https://ashlyticss.com/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ashlyticss.com/">
@@ -3574,29 +3574,33 @@ function msfSubmit(){
   };
   if(msfSubmit.sending)return;
   msfSubmit.sending=true;
-  if(typeof emailjs!=='undefined'){
-    console.log('EmailJS sending with payload:',{to_email:'hello@ashlyticss.com',from_name:name,from_email:email,subject:'New Enquiry from '+name});
-    var submitBtn=document.querySelector('#msfWrap .msf-next, .msf-step.active button');
-    emailjs.send('service_mml189p','template_1lpp3n4',{
-      to_email:'hello@ashlyticss.com',
-      subject:'New Enquiry: '+name+(company?' ('+company+')':''),
-      from_name:name,
-      from_email:email,
-      reply_to:email,
-      company:company||'Not provided',
-      services:chips,
-      message:'👤 Name: '+name+'\n📧 Email: '+email+'\n🏢 Company: '+(company||'Not provided')+'\n🛠 Services Interested In: '+chips+'\n\n💬 Message:\n'+(msg||'No additional message')
-    }).then(function(res){
-      console.log('EmailJS SUCCESS:',res.status,res.text);
-      hide();
-    },function(err){
-      console.error('EmailJS FAILED:',JSON.stringify(err));
-      alert('Something went wrong. Please message us on WhatsApp instead.');
-      msfSubmit.sending=false;
-    });
-  } else {
-    hide();
+  if(typeof emailjs==='undefined'){
+    console.error('EmailJS SDK not loaded — cannot send email.');
+    alert('Email service failed to load. Please refresh the page or contact us on WhatsApp.');
+    msfSubmit.sending=false;
+    return;
   }
+  // Ensure init is applied even if onload fired before DOM was ready
+  try{ emailjs.init({publicKey:'o_XE4MKTt5m61GLYL'}); }catch(e){}
+  console.log('EmailJS sending with payload:',{to_email:'ashlytics01@gmail.com',from_name:name,from_email:email,subject:'New Enquiry from '+name});
+  emailjs.send('service_mml189p','template_1lpp3n4',{
+    to_email:'ashlytics01@gmail.com',
+    subject:'New Enquiry: '+name+(company?' ('+company+')':''),
+    from_name:name,
+    from_email:email,
+    reply_to:email,
+    company:company||'Not provided',
+    services:chips,
+    message:'👤 Name: '+name+'\n📧 Email: '+email+'\n🏢 Company: '+(company||'Not provided')+'\n🛠 Services Interested In: '+chips+'\n\n💬 Message:\n'+(msg||'No additional message')
+  }).then(function(res){
+    console.log('EmailJS SUCCESS:',res.status,res.text);
+    msfSubmit.sending=false;
+    hide();
+  },function(err){
+    console.error('EmailJS FAILED:',JSON.stringify(err));
+    alert('Something went wrong. Please message us on WhatsApp instead.');
+    msfSubmit.sending=false;
+  });
 }
 
 // SMOOTH ANCHOR SCROLL — offset for fixed nav height
