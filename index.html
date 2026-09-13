@@ -1188,12 +1188,34 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
       <div class="strrow"><span class="sd"></span>Built around your workflow — not a generic CRM template</div>
     </div>
 
-    <div class="prod-cta">
-      <a href="https://shapedops.com" target="_blank" rel="noopener" class="bpri"><span>Explore ShapedOps &rarr;</span></a>
-      <div class="hbadge" style="margin:0"><span class="live"></span>&nbsp;Early Access &middot; Built by Ashlyticss</div>
+    <div class="prod-form">
+      <div class="prod-form-grid">
+        <input class="audit-input" id="prodName" type="text" placeholder="Your name">
+        <input class="audit-input" id="prodBusiness" type="text" placeholder="Business name">
+        <input class="audit-input" id="prodWhatsapp" type="tel" placeholder="WhatsApp number">
+        <input class="audit-input" id="prodEmail" type="email" placeholder="Email">
+      </div>
+      <input type="text" id="prodWebsite" class="prod-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="bpri audit-btn" id="prodSubmit" onclick="submitProductLead()">
+        <span>Get Early Access &rarr;</span>
+      </button>
+      <div id="prodMsg" style="display:none;margin-top:14px;padding:11px 14px;font-size:.8rem;text-align:center;border-radius:4px"></div>
+      <div class="prod-alt">
+        or <a href="https://shapedops.com" target="_blank" rel="noopener">explore ShapedOps directly &rarr;</a>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+.prod-form{max-width:480px;margin:32px auto 0;text-align:left}
+.prod-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:560px){.prod-form-grid{grid-template-columns:1fr}}
+.prod-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.prod-alt{text-align:center;margin-top:14px;font-family:var(--fm);font-size:.68rem;color:var(--muted)}
+.prod-alt a{color:var(--gold2);text-decoration:none;border-bottom:1px solid rgba(56,189,248,.3)}
+.prod-alt a:hover{color:var(--gold)}
+</style>
 
 <style>
 #product{padding:90px 64px;background:linear-gradient(180deg,#04080f 0%,#060d1a 100%);position:relative;z-index:2;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
@@ -3191,7 +3213,7 @@ if(window.matchMedia('(hover:hover)').matches){
     [0.21,0.37].forEach(function(rf,ri){
       var orR=Math.min(W,H)*rf;
       // glow ring
-      var grd=ctx.createRadialGradient(CX,CY,orR-2,CX,CY,orR+2);
+      var grd=ctx.createRadialGradient(CX,CY,Math.max(0,orR-2),CX,CY,orR+2);
       grd.addColorStop(0,'rgba(56,189,248,0)');grd.addColorStop(0.5,'rgba(56,189,248,0.07)');grd.addColorStop(1,'rgba(56,189,248,0)');
       ctx.beginPath();ctx.arc(CX,CY,orR,0,Math.PI*2);
       ctx.strokeStyle=grd;ctx.lineWidth=4;ctx.setLineDash([]);ctx.stroke();
@@ -3372,6 +3394,49 @@ if(window.matchMedia('(hover:hover)').matches){
 })();
 
 
+
+// SHAPEDOPS EARLY-ACCESS FORM (Product section) - posts to the live
+// ShapedOps app's public lead-capture endpoint, same one the
+// shapedops.com landing page's own forms use, so a lead filled in here
+// lands in the exact same place.
+var LEADS_ENDPOINT = "https://shapedops.ashlyticss.com/api/leads";
+
+function submitProductLead(){
+  var name=document.getElementById('prodName').value.trim();
+  var business=document.getElementById('prodBusiness').value.trim();
+  var whatsapp=document.getElementById('prodWhatsapp').value.trim();
+  var email=document.getElementById('prodEmail').value.trim();
+  var website=document.getElementById('prodWebsite').value;
+  var btn=document.getElementById('prodSubmit');
+  var msg=document.getElementById('prodMsg');
+
+  if(!name||!business||!whatsapp||!email||!email.includes('@')){
+    msg.style.cssText='display:block;padding:10px 14px;font-size:.78rem;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:4px;margin-top:14px';
+    msg.textContent='Please fill in every field with a valid email.';
+    return;
+  }
+
+  btn.querySelector('span').textContent='Sending…';btn.disabled=true;
+
+  fetch(LEADS_ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({kind:'early_access',name:name,businessName:business,whatsapp:whatsapp,email:email,website:website})
+  }).then(function(res){
+    if(!res.ok) throw new Error('request failed');
+    msg.style.cssText='display:block;padding:10px 14px;font-size:.78rem;background:rgba(77,190,106,.1);border:1px solid rgba(77,190,106,.3);color:#4dbe6a;border-radius:4px;margin-top:14px';
+    msg.textContent="You're on the list — we'll be in touch.";
+    btn.querySelector('span').textContent='Sent ✓';
+    document.getElementById('prodName').value='';
+    document.getElementById('prodBusiness').value='';
+    document.getElementById('prodWhatsapp').value='';
+    document.getElementById('prodEmail').value='';
+  }).catch(function(){
+    msg.style.cssText='display:block;padding:10px 14px;font-size:.78rem;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:4px;margin-top:14px';
+    msg.textContent='Something went wrong. Please try again, or message us on WhatsApp instead.';
+    btn.querySelector('span').textContent='Get Early Access →';btn.disabled=false;
+  });
+}
 
 // AUDIT FORM SUBMIT
 function submitAudit(){
