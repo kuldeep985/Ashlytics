@@ -952,6 +952,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
     <div class="nword">Ash<b>lyticss</b></div>
   </a>
   <ul class="nlinks">
+    <li><a href="#product">Product</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#work">Work</a></li>
@@ -965,6 +966,7 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
 
 <div class="mnav" id="mn">
   <button class="mcls" id="mclsBtn" aria-label="Close menu">&#x2715;</button>
+  <a href="#product" onclick="document.getElementById('mn').classList.remove('open')">Product</a>
   <a href="#about" onclick="document.getElementById('mn').classList.remove('open')">About</a>
   <a href="#services" onclick="document.getElementById('mn').classList.remove('open')">Services</a>
   <a href="#work" onclick="document.getElementById('mn').classList.remove('open')">Work</a>
@@ -1170,6 +1172,35 @@ footer{background:#030810;border-top:1px solid var(--border2);padding:0}
     <div class="mitem"><span class="mdot"></span>Global Clients</div>
   </div>
 </div>
+
+<section id="product" aria-label="ShapedOps — built by Ashlyticss">
+  <div class="prod-wrap">
+    <div class="eye" style="justify-content:center">Our Product</div>
+    <h2 class="atitle" style="text-align:center">We Built The Tool<br><span style="color:var(--gold)">We Wished Existed</span></h2>
+    <p class="ap" style="text-align:center;max-width:640px;margin-left:auto;margin-right:auto">We've spent years building dashboards for founders drowning in spreadsheets — and kept watching the same founders run their own client work the exact same way: a leads spreadsheet, a dozen WhatsApp threads, and an invoice that "the client will pay soon." So we built ShapedOps — the operations system we wished existed, for the exact problem we kept seeing up close.</p>
+
+    <div class="strengths" style="max-width:620px;margin:32px auto 0">
+      <div class="str-h">&#9889; What ShapedOps Does</div>
+      <div class="strrow"><span class="sd"></span>A pipeline that tracks every deal automatically, start to close</div>
+      <div class="strrow"><span class="sd"></span>WhatsApp updates sent the moment a deal moves — no manual follow-up</div>
+      <div class="strrow"><span class="sd"></span>Payments and milestones chased automatically, not manually</div>
+      <div class="strrow"><span class="sd"></span>Real-time revenue and pipeline numbers, always on</div>
+      <div class="strrow"><span class="sd"></span>Built around your workflow — not a generic CRM template</div>
+    </div>
+
+    <div class="prod-cta">
+      <a href="https://shapedops.com" target="_blank" rel="noopener" class="bpri"><span>Explore ShapedOps &rarr;</span></a>
+      <div class="hbadge" style="margin:0"><span class="live"></span>&nbsp;Early Access &middot; Built by Ashlyticss</div>
+    </div>
+  </div>
+</section>
+
+<style>
+#product{padding:90px 64px;background:linear-gradient(180deg,#04080f 0%,#060d1a 100%);position:relative;z-index:2;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.prod-wrap{max-width:760px;margin:0 auto;text-align:center}
+.prod-cta{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:36px}
+@media(max-width:768px){#product{padding:64px 24px}.prod-cta{flex-direction:column}}
+</style>
 
 <section id="about" aria-label="About Ashlyticss">
   <!-- LEFT: visual -->
