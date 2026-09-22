@@ -1,0 +1,38 @@
+# Ashlyticss
+
+> Ashlyticss is a data analytics agency based in Ahmedabad, India, turning scattered spreadsheets into live Power BI dashboards for businesses across India and globally.
+
+## About
+
+Founded by Kuldeep Thakkar. Ashlyticss builds Power BI dashboards, sales analytics, marketing analytics, financial reporting, customer analytics, and data engineering solutions for growing businesses. Ashlyticss also built and operates ShapedOps (https://www.shapedops.com), a CRM and business operations platform for manufacturers, foundries, and trading businesses.
+
+## Services
+
+- Power BI dashboards
+- Sales intelligence
+- Marketing analytics
+- Financial reporting
+- Customer analytics
+- Data engineering / ETL pipelines
+
+## Where clients are
+
+Ahmedabad, Gujarat, India (home base), with clients across India, the United Arab Emirates, the United Kingdom, the United States, Canada, Australia, Singapore, New Zealand, Ireland, and South Africa.
+
+## Key facts
+
+- First working dashboard typically delivered within 48-72 hours of receiving data
+- Fixed price, fixed scope, agreed in writing before work starts
+- 30-day post-launch support on every project
+- 15+ projects delivered, 100% client satisfaction (self-reported)
+
+## Pages
+
+- [Homepage](https://www.ashlyticss.com/): services, case studies, FAQ, ROI calculator, and contact
+
+## Contact
+
+- Email: hello@ashlyticss.com
+- WhatsApp: +91 90998 67128
+- LinkedIn: https://www.linkedin.com/company/ashlyticss/
+- Location: Ahmedabad, Gujarat, India
