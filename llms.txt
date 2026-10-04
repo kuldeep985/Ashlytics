@@ -1,34 +1,40 @@
 # Ashlyticss
 
-> Ashlyticss is a data analytics agency based in Ahmedabad, India, turning scattered spreadsheets into live Power BI dashboards for businesses across India and globally.
+> Ashlyticss is a data analytics agency based in Ahmedabad, India. It turns scattered spreadsheets into live Power BI dashboards — connecting data sources, cleaning the data, building the data model and handing over a working dashboard — for businesses in India and abroad.
 
 ## About
 
-Founded by Kuldeep Thakkar. Ashlyticss builds Power BI dashboards, sales analytics, marketing analytics, financial reporting, customer analytics, and data engineering solutions for growing businesses. Ashlyticss also built and operates ShapedOps (https://www.shapedops.com), a CRM and business operations platform for manufacturers, foundries, and trading businesses.
+Founded by Kuldeep Thakkar (Founder & Lead Analyst). Clients work directly with the person who builds their dashboards. Ashlyticss also built and operates ShapedOps (https://www.shapedops.com), an order-to-cash system for manufacturers, foundries and traders: every order on one line from enquiry to payment, with documents and WhatsApp updates at each stage.
+
+## How a project runs
+
+1. Discovery call (30 minutes, no preparation needed)
+2. Scope and proposal within 24 hours: fixed scope, fixed price and timeline, agreed in writing
+3. First working version within 48–72 hours of receiving the data; most builds finalised within a week
+4. Handoff with a recorded walkthrough, written documentation and 30 days of WhatsApp support
+
+An NDA is signed before any data is shared.
 
 ## Services
 
 - Power BI dashboards
-- Sales intelligence
-- Marketing analytics
-- Financial reporting
-- Customer analytics
-- Data engineering / ETL pipelines
+- Sales analytics
+- Financial reporting (P&L, cash flow, budget vs actual)
+- Marketing analytics (ROAS, CAC, attribution)
+- Customer analytics (RFM, churn, lifetime value, cohorts)
+- Data engineering / ETL pipelines and data warehouses
 
-## Where clients are
+## Tools
 
-Ahmedabad, Gujarat, India (home base), with clients across India, the United Arab Emirates, the United Kingdom, the United States, Canada, Australia, Singapore, New Zealand, Ireland, and South Africa.
+Power BI, DAX, Power Query, Tableau, Looker Studio, Excel, SQL, Python, dbt, Airflow, Fivetran, BigQuery, Snowflake, PostgreSQL, MySQL, SQL Server, Azure, AWS, Google Cloud.
 
-## Key facts
+## Where
 
-- First working dashboard typically delivered within 48-72 hours of receiving data
-- Fixed price, fixed scope, agreed in writing before work starts
-- 30-day post-launch support on every project
-- 15+ projects delivered, 100% client satisfaction (self-reported)
+Based in Ahmedabad, Gujarat, India. Works remotely over email, WhatsApp and Zoom with businesses in India, the Middle East, the UK, the US and beyond.
 
 ## Pages
 
-- [Homepage](https://www.ashlyticss.com/): services, case studies, FAQ, ROI calculator, and contact
+- [Homepage](https://www.ashlyticss.com/): how a project works, services, example builds, ShapedOps, process, founder, ROI calculator, free data audit, FAQ and contact
 
 ## Contact
 
