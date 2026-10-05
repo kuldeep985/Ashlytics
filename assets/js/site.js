@@ -21,8 +21,34 @@
     addEventListener("keydown", function (e) { if (e.key === "Escape" && document.body.classList.contains("menu-open")) { setMenu(false); menuBtn.focus(); } });
   }
 
+  /* ------------------------------------------- headline words rise in */
+  // each word is wrapped twice (a clipping box and the moving word); nested
+  // spans such as .mark keep their own words
+  function splitWords(el) {
+    Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+      if (node.nodeType === 1) { splitWords(node); return; }
+      if (node.nodeType !== 3 || !node.textContent.trim()) return;
+      var frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+        var w = document.createElement("span"); w.className = "w";
+        var inner = document.createElement("span"); inner.textContent = part;
+        w.appendChild(inner); frag.appendChild(w);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+  if (!reduce) {
+    $$(".split").forEach(function (el) {
+      splitWords(el);
+      $$(".w > span", el).forEach(function (s, i) { s.style.transitionDelay = (0.15 + i * 0.07).toFixed(2) + "s"; });
+      requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add("in"); }); });
+    });
+  }
+
   /* ----------------------------------------------------------- reveals */
-  var revealTargets = $$(".reveal, .row");
+  var revealTargets = $$(".reveal, .row, .steps");
   if (reduce || !("IntersectionObserver" in window)) {
     revealTargets.forEach(function (el) { el.classList.add("in"); });
   } else {
@@ -150,6 +176,58 @@
     }
   });
 
+  /* ------------------------------ example builds: before → after */
+  // Each card starts on its messy "before" spreadsheet and turns into the
+  // dashboard once it has been on screen for a moment; the toggle flips it.
+  var builds = $$(".build");
+  function setBuild(card, before) {
+    card.classList.toggle("before", before);
+    $$(".ba button", card).forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.ba === "before") === before ? "true" : "false"); });
+  }
+  builds.forEach(function (card) {
+    $$(".ba button", card).forEach(function (b) {
+      b.addEventListener("click", function () { card.dataset.touched = "1"; setBuild(card, b.dataset.ba === "before"); });
+    });
+  });
+  if (!reduce && "IntersectionObserver" in window && builds.length) {
+    builds.forEach(function (card) { setBuild(card, true); });
+    var buildIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        buildIO.unobserve(e.target);
+        var delay = 1100 + builds.indexOf(e.target) % 3 * 280;
+        setTimeout(function () { if (!e.target.dataset.touched) setBuild(e.target, false); }, delay);
+      });
+    }, { threshold: 0.6 });
+    builds.forEach(function (card) { buildIO.observe(card); });
+  }
+
+  /* ------------------------------- pointer: card glow + product tilt */
+  if (!reduce && matchMedia("(pointer: fine)").matches) {
+    var glowSel = ".card, .stack > div, .form-card, .prod-strip";
+    var lastEvt = null, glowQueued = false, glowEl = null;
+    var tilt = $("[data-tilt]");
+    var flush = function () {
+      glowQueued = false;
+      var e = lastEvt, el = e.target.closest ? e.target.closest(glowSel) : null;
+      if (glowEl && glowEl !== el) { glowEl.style.removeProperty("--mx"); glowEl.style.removeProperty("--my"); }
+      glowEl = el;
+      if (el) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", (e.clientX - r.left).toFixed(0) + "px");
+        el.style.setProperty("--my", (e.clientY - r.top).toFixed(0) + "px");
+      }
+      if (tilt) {
+        var t = tilt.getBoundingClientRect();
+        var inside = e.clientX >= t.left && e.clientX <= t.right && e.clientY >= t.top && e.clientY <= t.bottom;
+        var px = inside ? (e.clientX - t.left) / t.width - 0.5 : 0, py = inside ? (e.clientY - t.top) / t.height - 0.5 : 0;
+        tilt.style.setProperty("--ry", (-9 + px * 12).toFixed(2) + "deg");
+        tilt.style.setProperty("--rx", (4 - py * 8).toFixed(2) + "deg");
+      }
+    };
+    addEventListener("pointermove", function (e) { lastEvt = e; if (!glowQueued) { glowQueued = true; requestAnimationFrame(flush); } }, { passive: true });
+  }
+
   /* ---------------------------------------------------- ROI calculator */
   var rs = [1, 2, 3, 4].map(function (i) { return document.getElementById("rs" + i); });
   if (rs[0]) {
@@ -215,7 +293,7 @@
       prodForm.reset();
     }).catch(function () {
       say(msg, "Something went wrong. Please try again, or message us on WhatsApp instead.", false);
-      btn.querySelector("span").textContent = "Get early access →"; btn.disabled = false;
+      btn.querySelector("span").textContent = "Apply →"; btn.disabled = false;
     });
   });
 
