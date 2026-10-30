@@ -24,6 +24,15 @@ An NDA is signed before any data is shared.
 - Customer analytics (RFM, churn, lifetime value, cohorts)
 - Data engineering / ETL pipelines and data warehouses
 
+Beyond dashboards, Ashlyticss also sets up everyday business tools:
+
+- Billing software (GST invoices, Tally sync, payment reminders)
+- Business websites
+- Appointment booking
+- Order and job tracking (ShapedOps)
+- WhatsApp order and payment updates
+- Custom business tools
+
 ## Tools
 
 Power BI, DAX, Power Query, Tableau, Looker Studio, Excel, SQL, Python, dbt, Airflow, Fivetran, BigQuery, Snowflake, PostgreSQL, MySQL, SQL Server, Azure, AWS, Google Cloud.
