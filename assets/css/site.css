@@ -632,3 +632,41 @@ input:focus, select:focus, textarea:focus { border-color: var(--sky); box-shadow
   body { padding-bottom: 80px; }
 }
 @media (prefers-reduced-motion: reduce) { .hero-paths a { transition: none; } .hero-paths a:hover { transform: none; } }
+
+/* ---------------------------------------------------------------- human touches */
+.svc .svc-text { color: var(--muted); font-size: 15.5px; line-height: 1.65; }
+.hand-note { font-family: "Caveat", "Segoe Script", cursive; font-weight: 600; font-size: 28px; line-height: 1; color: var(--warm); transform: rotate(-2.5deg); transform-origin: left center; margin: 18px 0 0; display: inline-block; }
+.hand-note::after { content: ""; display: inline-block; width: 34px; height: 22px; margin-left: 8px; vertical-align: -6px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 22' fill='none' stroke='%23fb923c' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 4c10 0 20 2 26 14M28 18l-1-9M28 18l-9-2'/%3E%3C/svg%3E") no-repeat center / contain; }
+.hero-paths-label { font-family: "Caveat", "Segoe Script", cursive; font-weight: 600; font-size: 26px; letter-spacing: 0; text-transform: none; color: var(--warm); transform: rotate(-1.5deg); transform-origin: left center; margin-bottom: 0; }
+
+.prod-door { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.prod-door .prod-strip-head small { display: block; color: var(--muted); }
+.audit-door .btn { margin-top: 6px; }
+.audit-door .direct { margin-top: 16px; }
+
+.tracker { margin-top: clamp(40px, 5vw, 72px); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 4vw, 56px); align-items: center; padding: clamp(22px, 3vw, 36px); border: 1px solid var(--line-2); border-radius: 22px; background: linear-gradient(135deg, rgba(14, 116, 144, 0.14), rgba(7, 14, 26, 0.9) 55%); }
+.tracker-copy h3 { font-size: clamp(22px, 2.2vw, 30px); margin: 4px 0 14px; }
+.tracker-copy p:not(.hand-note) { color: var(--muted); max-width: 42ch; }
+.tracker-demo { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 16px; align-items: stretch; }
+.trk-phone, .trk-link { border: 1px solid var(--line-2); border-radius: 22px; background: var(--ink-1); padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; }
+.trk-phone { border-radius: 30px; }
+.trk-who, .trk-url { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin: 0; }
+.trk-url span { float: right; color: var(--muted); }
+.trk-job { font-weight: 600; margin: 6px 0 0; }
+.trk-now { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+.trk-btn { width: 100%; justify-content: center; margin-top: auto; background: #b7f34a; color: #0a1405; }
+.trk-reset { margin-top: auto; height: 46px; border-radius: 12px; border: 1px solid var(--line-2); background: transparent; color: var(--text); cursor: pointer; }
+.trk-steps { list-style: none; margin: 8px 0 4px; padding: 0; display: grid; gap: 10px; }
+.trk-steps li { display: flex; align-items: center; gap: 12px; color: var(--faint); font-size: 15px; transition: color 0.3s var(--ease); }
+.trk-steps i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ink-3); flex: none; transition: all 0.3s var(--ease-out); }
+.trk-steps li.done { color: var(--text); }
+.trk-steps li.done i { background: #b7f34a; border-color: #b7f34a; box-shadow: 0 0 0 4px rgba(183, 243, 74, 0.14); }
+.trk-steps li.cur { color: var(--text); font-weight: 600; }
+.trk-steps li.cur i { border-color: #b7f34a; }
+.trk-state { margin: auto 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.trk-link.is-done .trk-state { color: #b7f34a; font-weight: 600; }
+.trk-link.pulse { animation: trkPulse 0.6s var(--ease-out); }
+@keyframes trkPulse { 0% { box-shadow: 0 0 0 0 rgba(183, 243, 74, 0.45); } 100% { box-shadow: 0 0 0 18px rgba(183, 243, 74, 0); } }
+@media (max-width: 900px) { .tracker { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .tracker-demo { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .trk-link.pulse { animation: none; } }

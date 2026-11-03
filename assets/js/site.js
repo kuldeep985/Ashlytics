@@ -276,51 +276,6 @@
 
   // ShapedOps early access — the same lead endpoint shapedops.com's own forms use
   var LEADS_ENDPOINT = "https://shapedops.ashlyticss.com/api/leads";
-  var prodForm = $("#prod-form");
-  if (prodForm) prodForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var name = $("#prodName").value.trim(), business = $("#prodBusiness").value.trim(), whatsapp = $("#prodWhatsapp").value.trim(), email = $("#prodEmail").value.trim(), website = $("#prodWebsite").value;
-    var btn = $("#prodSubmit"), msg = $("#prodMsg");
-    if (!name || !business || !whatsapp || !email || email.indexOf("@") < 0) { say(msg, "Please fill in every field with a valid email.", false); return; }
-    btn.querySelector("span").textContent = "Sending…"; btn.disabled = true;
-    fetch(LEADS_ENDPOINT, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind: "early_access", name: name, businessName: business, whatsapp: whatsapp, email: email, website: website })
-    }).then(function (res) {
-      if (!res.ok) throw new Error("request failed");
-      say(msg, "You're on the list — we'll be in touch.", true);
-      btn.querySelector("span").textContent = "Sent ✓";
-      prodForm.reset();
-    }).catch(function () {
-      say(msg, "Something went wrong. Please try again, or message us on WhatsApp instead.", false);
-      btn.querySelector("span").textContent = "Apply →"; btn.disabled = false;
-    });
-  });
-
-  // free data audit
-  var auditForm = $("#audit-form");
-  if (auditForm) auditForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var name = $("#auditName").value.trim(), company = $("#auditCompany").value.trim(), email = $("#auditEmail").value.trim(), goal = $("#auditGoal").value;
-    var btn = $("#auditSubmit"), msg = $("#auditMsg");
-    if (!name || !email || email.indexOf("@") < 0) { say(msg, "Please enter your name and a valid email.", false); return; }
-    if (!emailReady()) { say(msg, "Email service failed to load. Please message us on WhatsApp instead.", false); return; }
-    btn.querySelector("span").textContent = "Sending…"; btn.disabled = true;
-    emailjs.send("service_mml189p", "template_1lpp3n4", {
-      to_email: "hello@ashlyticss.com",
-      subject: "Free Data Audit: " + name + (company ? " (" + company + ")" : ""),
-      from_name: name, from_email: email, reply_to: email,
-      company: company || "Not provided", services: "Free Data Audit",
-      message: "👤 " + name + "\n📧 " + email + "\n🏢 " + (company || "—") + "\n🎯 " + (goal || "—") + "\n📊 ROI est: " + ($("#roiMain") ? $("#roiMain").textContent : "—")
-    }).then(function () {
-      say(msg, "✓ Received! We'll reply within 24 hours.", true);
-      btn.querySelector("span").textContent = "Sent ✓";
-    }, function () {
-      say(msg, "Something went wrong. Message us on WhatsApp instead.", false);
-      btn.querySelector("span").textContent = "Claim free audit →"; btn.disabled = false;
-    });
-  });
-
   // four-step enquiry
   var msf = $(".msf");
   if (msf) {
@@ -344,7 +299,7 @@
     $("#msfSend").addEventListener("click", function () {
       var name = $("#msf_name").value.trim(), email = $("#msf_email").value.trim();
       var chips = $$('.msf-chip[aria-pressed="true"]', msf).map(function (c) { return c.textContent; }).join(", ") || "Not specified";
-      var note = $("#msf_msg").value.trim(), company = $("#msf_company").value.trim();
+      var note = $("#msf_msg").value.trim(), company = $("#msf_company").value.trim(), phone = $("#msf_phone").value.trim();
       if (!name || !email) { goTo(1); return; }
       if (sending) return;
       if (!emailReady()) { alert("Email service failed to load. Please refresh the page or contact us on WhatsApp."); return; }
@@ -355,8 +310,11 @@
         subject: "New Enquiry: " + name + (company ? " (" + company + ")" : ""),
         from_name: name, from_email: email, reply_to: email,
         company: company || "Not provided", services: chips,
-        message: "👤 Name: " + name + "\n📧 Email: " + email + "\n🏢 Company: " + (company || "Not provided") + "\n🛠 Services Interested In: " + chips + "\n\n💬 Message:\n" + (note || "No additional message")
+        message: "👤 Name: " + name + "\n📧 Email: " + email + "\n🏢 Company: " + (company || "Not provided") + "\n📱 WhatsApp: " + (phone || "Not provided") + "\n🛠 Services Interested In: " + chips + "\n\n💬 Message:\n" + (note || "No additional message")
       }).then(function () {
+        if (/ShapedOps/.test(chips)) {
+          try { fetch(LEADS_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "early_access", name: name, businessName: company || "Not provided", whatsapp: phone, email: email }) }).catch(function () {}); } catch (e) {}
+        }
         $("#msfFill").style.width = "100%";
         $("#msfWrap").hidden = true;
         $(".msf-top", msf).hidden = true;
@@ -366,6 +324,45 @@
         sending = false; send.disabled = false; send.textContent = "Send enquiry →";
       });
     });
+  }
+
+
+  // links elsewhere on the page that open the one enquiry form with something pre-selected
+  $$("[data-need]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var need = a.getAttribute("data-need").toLowerCase();
+      var form = $(".msf"); if (!form) return;
+      $$(".msf-chip", form).forEach(function (c) {
+        var t = c.textContent.toLowerCase();
+        c.setAttribute("aria-pressed", (t.indexOf(need) === 0 || (need === "shapedops" && t.indexOf("shapedops") > -1)) ? "true" : "false");
+      });
+      var m = $("#msf_msg");
+      if (a.getAttribute("data-roi") && m && !m.value) {
+        var est = $("#roiMain"); if (est && est.textContent) m.value = "My rough estimate from the calculator on your site: " + est.textContent + " a year.";
+      }
+    });
+  });
+
+  // the small order tracker demo
+  var trkBtn = $("#trkBtn");
+  if (trkBtn) {
+    var names = ["Design", "Print", "Stitch", "Pack", "Dispatch"], cur = 1;
+    var items = $$("#trkSteps li"), state = $("#trkState"), now = $("#trkNow"), reset = $("#trkReset");
+    var box = $(".trk-link");
+    var paint = function () {
+      items.forEach(function (li, i) { li.className = i < cur ? "done" : (i === cur ? "cur" : ""); });
+      var finished = cur >= names.length;
+      state.textContent = finished ? "Delivered. Thank you!" : "In progress: " + names[cur];
+      now.textContent = finished ? "All steps done" : "Now: " + names[cur];
+      trkBtn.hidden = finished; reset.hidden = !finished;
+      if (!finished) trkBtn.textContent = "Mark " + names[cur] + " done";
+      box.classList.toggle("is-done", finished);
+    };
+    trkBtn.addEventListener("click", function () {
+      if (cur < names.length) { cur++; paint(); box.classList.remove("pulse"); void box.offsetWidth; box.classList.add("pulse"); }
+    });
+    reset.addEventListener("click", function () { cur = 1; paint(); });
+    paint();
   }
 
   /* --------------------------------------------- smooth scroll after load */
