@@ -306,7 +306,7 @@
       sending = true;
       var send = $("#msfSend"); send.disabled = true; send.textContent = "Sending…";
       emailjs.send("service_mml189p", "template_1lpp3n4", {
-        to_email: "ashlytics01@gmail.com",
+        to_email: "hello@ashlyticss.com",
         subject: "New Enquiry: " + name + (company ? " (" + company + ")" : ""),
         from_name: name, from_email: email, reply_to: email,
         company: company || "Not provided", services: chips,
