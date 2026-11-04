@@ -5,16 +5,19 @@
 // scrolling then moves the camera step by step while the page explains each.
 import * as THREE from "three";
 
+// drawn like a technical sketch on graph paper: ink lines, paper-white
+// blocks, ballpoint blue for clean data and a red pen for the mess
 const C = {
-  ink: 0x04080f,
-  box: 0x0c1a2e,
-  sky: 0x38bdf8,
-  sky2: 0x7dd3fc,
-  deep: 0x0e7490,
-  warm: 0xfb923c,
-  red: 0xf87171,
-  violet: 0xa78bfa,
+  paper: 0xf4efe6,
+  ink: 0x1c1a17,
+  box: 0xfbf8f2,
+  sky: 0x1f3fbf,
+  warm: 0xd9822b,
+  red: 0xc8361d,
+  violet: 0x7a4fb5,
+  mustard: 0xc9a227,
 };
+const INK = "#1c1a17", MUTED = "#5d564b", FAINT = "#8a8274", RED = "#c8361d", BLUE = "#1f3fbf", GREEN = "#2f7d4f";
 // where each step sits along the line
 const SRC_X = -22, GATE_X = -8, MODEL_X = 5, DASH_X = 19, DECIDE_X = 31;
 const STAGE = { hero: 0, today: 1, connect: 2, clean: 3, model: 4, dash: 5, decide: 6, outro: 7 };
@@ -30,8 +33,10 @@ function fontsReady() {
     Promise.all([
       document.fonts.load('500 40px "IBM Plex Mono"'),
       document.fonts.load('400 40px "IBM Plex Mono"'),
-      document.fonts.load('600 40px "Unbounded"'),
-      document.fonts.load('500 40px "Inter"'),
+      document.fonts.load('500 40px "Newsreader"'),
+      document.fonts.load('italic 500 40px "Newsreader"'),
+      document.fonts.load('500 40px "IBM Plex Sans"'),
+      document.fonts.load('700 40px "Kalam"'),
     ]),
     new Promise((r) => setTimeout(r, 2500)),
   ]).catch(() => {});
@@ -60,7 +65,7 @@ function roundRect(g, x, y, w, h, r) {
   g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
   g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
 }
-const MONO = '"IBM Plex Mono", monospace', DISPLAY = '"Unbounded", sans-serif', SANS = '"Inter", sans-serif';
+const MONO = '"IBM Plex Mono", monospace', DISPLAY = '"Newsreader", Georgia, serif', SANS = '"IBM Plex Sans", sans-serif', HAND = '"Kalam", cursive';
 
 // ---------------------------------------------------------------------------
 // The scattered files of "today" — one texture each, drawn once
@@ -111,22 +116,23 @@ function drawSource(kind, g, w, h) {
       ["#1044", "Paid", "₹5,120"], ["#1045", "Refund", "-₹980"],
     ], ["Order", "Status", "Total"]);
   } else if (kind === "csv" || kind === "crm") {
-    g.fillStyle = "#101b2c"; roundRect(g, 0, 0, w, h, 14); g.fill();
-    g.strokeStyle = "rgba(125,211,252,0.35)"; g.lineWidth = 2; roundRect(g, 1, 1, w - 2, h - 2, 14); g.stroke();
-    g.fillStyle = "#7dd3fc"; g.font = `500 22px ${MONO}`;
+    g.fillStyle = "#fffdf8"; roundRect(g, 0, 0, w, h, 6); g.fill();
+    g.strokeStyle = "rgba(28,26,23,0.35)"; g.lineWidth = 2; roundRect(g, 1, 1, w - 2, h - 2, 6); g.stroke();
+    g.fillStyle = INK; g.font = `500 22px ${MONO}`;
     g.fillText(kind === "csv" ? "meta_ads_export (3).csv" : "contacts_export.csv", pad, 42);
-    g.font = `400 19px ${MONO}`; g.fillStyle = "#b8cbe0";
+    g.fillStyle = "rgba(28,26,23,0.18)"; g.fillRect(pad, 56, w - pad * 2, 2);
+    g.font = `400 19px ${MONO}`; g.fillStyle = MUTED;
     const lines = kind === "csv"
       ? ["campaign,spend,clicks,purch", "Diwali_Reels,42180,3412,61", "Lookalike_2,,1890,", "Diwali_Reels,42180,3412,61", "Story_ads,12040,980,17", "TOTAL,=SUM(B2:B6)"]
       : ["name,phone,city,source", "Rakesh M,98250xxxxx,Ahd,Expo", "rakesh m.,+91 98250xxxxx,AHMEDABAD,", "Anita S,,Surat,Web", "N/A,N/A,N/A,N/A", "Vikram,9909xxxxxx,Vadodara,Ref"];
-    lines.forEach((l, i) => { g.fillStyle = /N\/A|,,|=SUM|rakesh m/.test(l) ? "#fb923c" : "#b8cbe0"; g.fillText(l, pad, 86 + i * 38); });
+    lines.forEach((l, i) => { g.fillStyle = /N\/A|,,|=SUM|rakesh m/.test(l) ? RED : MUTED; g.fillText(l, pad, 86 + i * 38); });
   } else if (kind === "chat") {
-    g.fillStyle = "#0b141a"; roundRect(g, 0, 0, w, h, 14); g.fill();
-    g.fillStyle = "#1f2c34"; roundRect(g, 0, 0, w, 58, 14); g.fill(); g.fillRect(0, 40, w, 18);
-    g.fillStyle = "#e9edef"; g.font = `600 22px ${SANS}`; g.fillText("Sales team", pad, 37);
+    g.fillStyle = "#efeae2"; roundRect(g, 0, 0, w, h, 14); g.fill();
+    g.fillStyle = "#075e54"; roundRect(g, 0, 0, w, 58, 14); g.fill(); g.fillRect(0, 40, w, 18);
+    g.fillStyle = "#ffffff"; g.font = `600 22px ${SANS}`; g.fillText("Sales team", pad, 37);
     const bubble = (x, y, bw, lines, out) => {
-      g.fillStyle = out ? "#005c4b" : "#202c33"; roundRect(g, x, y, bw, 28 + lines.length * 30, 12); g.fill();
-      g.fillStyle = "#e9edef"; g.font = `400 20px ${SANS}`;
+      g.fillStyle = out ? "#d9fdd3" : "#ffffff"; roundRect(g, x, y, bw, 28 + lines.length * 30, 12); g.fill();
+      g.fillStyle = "#111b21"; g.font = `400 20px ${SANS}`;
       lines.forEach((t, i) => g.fillText(t, x + 16, y + 34 + i * 30));
     };
     bubble(pad, 80, 400, ["Can someone send me this", "month's sales numbers? 🙏"], false);
@@ -145,19 +151,21 @@ const SOURCES = [
   { kind: "orders", p: [-23.2, 6.9, 1.6], r: [0.08, 0.34, 0.05] },
 ];
 
+// step labels read like notes pencilled above each station
 function labelTexture(num, name, renderer) {
   return canvasTexture(1024, 256, (g) => {
-    g.font = `500 64px ${MONO}`; g.fillStyle = "#38bdf8"; g.fillText(num, 8, 80);
-    g.fillStyle = "rgba(56,189,248,0.45)"; g.fillRect(124, 52, 70, 4);
-    g.font = `500 92px ${MONO}`; g.fillStyle = "#e6f4ff"; g.fillText(name, 4, 196);
+    g.font = `700 70px ${HAND}`; g.fillStyle = RED; g.fillText(num, 10, 84);
+    g.strokeStyle = RED; g.lineWidth = 4; g.lineCap = "round";
+    g.beginPath(); g.moveTo(112, 58); g.quadraticCurveTo(150, 50, 196, 56); g.stroke();
+    g.font = `italic 500 104px ${DISPLAY}`; g.fillStyle = INK; g.fillText(name, 4, 204);
   }, renderer);
 }
 function tagTexture(text, sub, renderer) {
   return canvasTexture(512, 160, (g, w, h) => {
-    g.fillStyle = "rgba(7,18,34,0.92)"; roundRect(g, 4, 4, w - 8, h - 8, 22); g.fill();
-    g.strokeStyle = "rgba(56,189,248,0.6)"; g.lineWidth = 3; roundRect(g, 4, 4, w - 8, h - 8, 22); g.stroke();
-    g.textAlign = "center"; g.fillStyle = "#e6f4ff"; g.font = `600 46px ${DISPLAY}`; g.fillText(text, w / 2, sub ? 76 : 96);
-    if (sub) { g.font = `400 26px ${MONO}`; g.fillStyle = "#7dd3fc"; g.fillText(sub, w / 2, 122); }
+    g.fillStyle = "#fffdf8"; roundRect(g, 4, 4, w - 8, h - 8, 8); g.fill();
+    g.strokeStyle = INK; g.lineWidth = 3; roundRect(g, 4, 4, w - 8, h - 8, 8); g.stroke();
+    g.textAlign = "center"; g.fillStyle = INK; g.font = `500 50px ${DISPLAY}`; g.fillText(text, w / 2, sub ? 76 : 96);
+    if (sub) { g.font = `400 24px ${MONO}`; g.fillStyle = RED; g.fillText(sub, w / 2, 122); }
   }, renderer);
 }
 function glowTexture() {
@@ -182,27 +190,27 @@ const LINE_X0 = 0.5, LINE_X1 = 4.4, LINE_Y0 = -2.35, LINE_Y1 = 0.25;
 const LINE = [0.18, 0.3, 0.26, 0.42, 0.38, 0.55, 0.5, 0.64, 0.6, 0.74, 0.7, 0.86];
 const tx = (x) => (x + PW / 2) * PX, ty = (y) => (PH / 2 - y) * PX;
 function drawPanel(g, w, h) {
-  g.fillStyle = "#071222"; roundRect(g, 0, 0, w, h, 34); g.fill();
-  g.strokeStyle = "rgba(56,189,248,0.45)"; g.lineWidth = 4; roundRect(g, 2, 2, w - 4, h - 4, 34); g.stroke();
-  g.fillStyle = "#e6f4ff"; g.font = `600 46px ${DISPLAY}`; g.fillText("Sales overview", 56, 92);
-  g.font = `400 22px ${MONO}`; g.fillStyle = "#62809c"; g.textAlign = "right";
+  g.fillStyle = "#ffffff"; roundRect(g, 0, 0, w, h, 14); g.fill();
+  g.strokeStyle = INK; g.lineWidth = 5; roundRect(g, 2.5, 2.5, w - 5, h - 5, 14); g.stroke();
+  g.fillStyle = INK; g.font = `500 58px ${DISPLAY}`; g.fillText("Sales overview", 56, 98);
+  g.font = `400 22px ${MONO}`; g.fillStyle = FAINT; g.textAlign = "right";
   g.fillText("SAMPLE DASHBOARD · ILLUSTRATIVE DATA", w - 56, h - 28); g.textAlign = "left";
   ["This quarter", "All regions", "All channels"].forEach((t, i) => {
     const x = w - 56 - (3 - i) * 200 + 18;
-    g.strokeStyle = "rgba(125,211,252,0.35)"; g.lineWidth = 2; roundRect(g, x, 60, 182, 44, 22); g.stroke();
-    g.fillStyle = "#9cb6cf"; g.font = `400 21px ${SANS}`; g.fillText(t + " ▾", x + 20, 89);
+    g.strokeStyle = "rgba(28,26,23,0.3)"; g.lineWidth = 2; roundRect(g, x, 60, 182, 44, 6); g.stroke();
+    g.fillStyle = MUTED; g.font = `400 21px ${SANS}`; g.fillText(t + " ▾", x + 20, 89);
   });
-  g.font = `500 24px ${MONO}`; g.fillStyle = "#9cb6cf";
+  g.font = `500 24px ${MONO}`; g.fillStyle = MUTED;
   g.fillText("REVENUE BY MONTH", tx(BAR_X0), ty(0.55));
   g.fillText("ORDERS TREND", tx(LINE_X0), ty(0.55));
-  g.strokeStyle = "rgba(125,211,252,0.12)"; g.lineWidth = 2;
+  g.strokeStyle = "rgba(28,26,23,0.1)"; g.lineWidth = 2;
   for (let k = 0; k <= 4; k++) {
     const yb = ty(BAR_BASE + (BAR_MAX * k) / 4);
     g.beginPath(); g.moveTo(tx(BAR_X0), yb); g.lineTo(tx(BAR_X1), yb); g.stroke();
     const yl = ty(LINE_Y0 + ((LINE_Y1 - LINE_Y0) * k) / 4);
     g.beginPath(); g.moveTo(tx(LINE_X0), yl); g.lineTo(tx(LINE_X1), yl); g.stroke();
   }
-  g.font = `400 20px ${MONO}`; g.fillStyle = "#62809c"; g.textAlign = "center";
+  g.font = `400 20px ${MONO}`; g.fillStyle = FAINT; g.textAlign = "center";
   const step = (BAR_X1 - BAR_X0) / BARS.length;
   MONTHS.forEach((m, i) => g.fillText(m, tx(BAR_X0 + step * (i + 0.5)), ty(BAR_BASE) + 34));
   g.textAlign = "left";
@@ -212,47 +220,47 @@ function drawPanelFull(g, w, h) {
   drawPanel(g, w, h);
   KPIS.forEach((k, i) => {
     const cx = tx(-3.55 + i * 2.37), cy = ty(1.7), kw = 2.15 * PX, kh = 0.975 * PX;
-    g.fillStyle = "#0c1a2e"; roundRect(g, cx - kw / 2, cy - kh / 2, kw, kh, 16); g.fill();
-    g.strokeStyle = "rgba(56,189,248,0.4)"; g.lineWidth = 2; roundRect(g, cx - kw / 2, cy - kh / 2, kw, kh, 16); g.stroke();
-    g.font = `500 18px ${MONO}`; g.fillStyle = "#9cb6cf"; g.fillText(k[0], cx - kw / 2 + 20, cy - 26);
-    g.font = `600 44px ${DISPLAY}`; g.fillStyle = "#f0f8ff"; g.fillText(k[1], cx - kw / 2 + 18, cy + 22);
+    g.fillStyle = "#f6f2ea"; roundRect(g, cx - kw / 2, cy - kh / 2, kw, kh, 8); g.fill();
+    g.strokeStyle = "rgba(28,26,23,0.25)"; g.lineWidth = 2; roundRect(g, cx - kw / 2, cy - kh / 2, kw, kh, 8); g.stroke();
+    g.font = `500 18px ${MONO}`; g.fillStyle = MUTED; g.fillText(k[0], cx - kw / 2 + 20, cy - 26);
+    g.font = `500 50px ${DISPLAY}`; g.fillStyle = INK; g.fillText(k[1], cx - kw / 2 + 18, cy + 24);
     g.font = `500 17px ${MONO}`; g.fillStyle = k[3]; g.fillText(k[2], cx - kw / 2 + 20, cy + 56);
   });
   const step = (BAR_X1 - BAR_X0) / BARS.length;
-  g.fillStyle = "#38bdf8";
+  g.fillStyle = BLUE;
   BARS.forEach((b, i) => { const x0 = tx(BAR_X0 + step * (i + 0.19)), bw = step * 0.62 * PX, top = ty(BAR_BASE + b * BAR_MAX); g.fillRect(x0, top, bw, ty(BAR_BASE) - top); });
-  g.strokeStyle = "#7dd3fc"; g.lineWidth = 5; g.beginPath();
+  g.strokeStyle = RED; g.lineWidth = 5; g.beginPath();
   LINE.forEach((v, i) => { const x = tx(LINE_X0 + ((LINE_X1 - LINE_X0) * i) / (LINE.length - 1)), y = ty(LINE_Y0 + v * (LINE_Y1 - LINE_Y0)); i ? g.lineTo(x, y) : g.moveTo(x, y); });
   g.stroke();
 }
 const KPIS = [
-  ["REVENUE", "₹4.8 Cr", "▲ 12% vs last qtr", "#4ade80"],
-  ["GROSS MARGIN", "31.4%", "▲ 2.1 pts", "#4ade80"],
-  ["ORDERS", "12,480", "▲ 8%", "#4ade80"],
-  ["REPEAT BUYERS", "38%", "▼ 1.2 pts", "#fb923c"],
+  ["REVENUE", "₹4.8 Cr", "▲ 12% vs last qtr", GREEN],
+  ["GROSS MARGIN", "31.4%", "▲ 2.1 pts", GREEN],
+  ["ORDERS", "12,480", "▲ 8%", GREEN],
+  ["REPEAT BUYERS", "38%", "▼ 1.2 pts", RED],
 ];
 function kpiTexture(k, renderer) {
   return canvasTexture(512, 232, (g, w, h) => {
-    g.fillStyle = "#0c1a2e"; roundRect(g, 4, 4, w - 8, h - 8, 24); g.fill();
-    g.strokeStyle = "rgba(56,189,248,0.4)"; g.lineWidth = 3; roundRect(g, 4, 4, w - 8, h - 8, 24); g.stroke();
-    g.font = `500 26px ${MONO}`; g.fillStyle = "#9cb6cf"; g.fillText(k[0], 34, 58);
-    g.font = `600 66px ${DISPLAY}`; g.fillStyle = "#f0f8ff"; g.fillText(k[1], 30, 142);
+    g.fillStyle = "#f6f2ea"; roundRect(g, 4, 4, w - 8, h - 8, 12); g.fill();
+    g.strokeStyle = "rgba(28,26,23,0.3)"; g.lineWidth = 3; roundRect(g, 4, 4, w - 8, h - 8, 12); g.stroke();
+    g.font = `500 26px ${MONO}`; g.fillStyle = MUTED; g.fillText(k[0], 34, 58);
+    g.font = `500 76px ${DISPLAY}`; g.fillStyle = INK; g.fillText(k[1], 30, 146);
     g.font = `500 26px ${MONO}`; g.fillStyle = k[3]; g.fillText(k[2], 34, 194);
   }, renderer);
 }
 function phoneTexture(renderer) {
   return canvasTexture(360, 720, (g, w, h) => {
-    g.fillStyle = "#071222"; g.fillRect(0, 0, w, h);
-    g.fillStyle = "#e6f4ff"; g.font = `600 28px ${DISPLAY}`; g.fillText("Sales", 26, 76);
-    g.font = `400 16px ${MONO}`; g.fillStyle = "#62809c"; g.fillText("SAMPLE DATA", 26, 104);
+    g.fillStyle = "#ffffff"; g.fillRect(0, 0, w, h);
+    g.fillStyle = INK; g.font = `500 34px ${DISPLAY}`; g.fillText("Sales", 26, 76);
+    g.font = `400 16px ${MONO}`; g.fillStyle = FAINT; g.fillText("SAMPLE DATA", 26, 104);
     KPIS.forEach((k, i) => {
       const y = 132 + i * 112;
-      g.fillStyle = "#0c1a2e"; roundRect(g, 20, y, w - 40, 96, 16); g.fill();
-      g.font = `500 16px ${MONO}`; g.fillStyle = "#9cb6cf"; g.fillText(k[0], 38, y + 32);
-      g.font = `600 34px ${DISPLAY}`; g.fillStyle = "#f0f8ff"; g.fillText(k[1], 36, y + 76);
+      g.fillStyle = "#f6f2ea"; roundRect(g, 20, y, w - 40, 96, 10); g.fill();
+      g.font = `500 16px ${MONO}`; g.fillStyle = MUTED; g.fillText(k[0], 38, y + 32);
+      g.font = `500 40px ${DISPLAY}`; g.fillStyle = INK; g.fillText(k[1], 36, y + 78);
       g.font = `500 15px ${MONO}`; g.fillStyle = k[3]; g.textAlign = "right"; g.fillText(k[2].split(" vs")[0], w - 36, y + 76); g.textAlign = "left";
     });
-    g.fillStyle = "#38bdf8";
+    g.fillStyle = BLUE;
     BARS.forEach((b, i) => { const bh = b * 120; g.fillRect(30 + i * 38, 690 - bh, 24, bh); });
   }, renderer);
 }
@@ -281,11 +289,12 @@ async function main() {
   renderer.setPixelRatio(dpr);
   renderer.debug.checkShaderErrors = false;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMapping = THREE.NoToneMapping;
   renderer.setClearColor(0x000000, 0);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(C.ink, 30, 80);
+  // the fog is the paper, so far things fade into the page
+  scene.fog = new THREE.Fog(C.paper, 30, 80);
   const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 220);
   let ready = false, visible = true, frameQueued = false, lastG = -1;
   let animating = true;
@@ -293,34 +302,35 @@ async function main() {
   let halfRate = mobile, skip = false, acc = 0, sampleSum = 0, samples = 0;
 
   // ---- light and floor
-  scene.add(new THREE.HemisphereLight(0xbfe8ff, 0x04080f, 0.9));
-  const key = new THREE.DirectionalLight(0xffffff, 1.1);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xcfc4b0, 1.55));
+  const key = new THREE.DirectionalLight(0xffffff, 1.0);
   key.position.set(12, 22, 14);
   scene.add(key);
-  const grid = new THREE.GridHelper(180, 90, 0x163a55, 0x0b1c2e);
+  // graph paper
+  const grid = new THREE.GridHelper(180, 90, 0xa9b6d8, 0xc9d1e6);
   grid.material.transparent = true;
-  grid.material.opacity = 0.7;
+  grid.material.opacity = 0.85;
   // the grid's centre is often nearer the camera than the floating pieces, so
   // sorted by distance it would draw over them
   grid.renderOrder = -2;
   scene.add(grid);
   const glowTex = glowTexture();
 
-  // faint "data dust" for depth: static, so it costs nothing per frame
+  // faint pencil specks for depth: static, so they cost nothing per frame
   {
     const n = mobile ? 160 : 320, pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
       pos[i * 3] = -34 + Math.random() * 74; pos[i * 3 + 1] = 0.5 + Math.random() * 12; pos[i * 3 + 2] = -14 + Math.random() * 20;
     }
     const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    const dust = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x2b5d80, size: 0.09, map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const dust = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x8a8274, size: 0.07, map: glowTex, transparent: true, opacity: 0.55, depthWrite: false }));
     dust.renderOrder = -1;
     scene.add(dust);
   }
   await breathe();
 
-  const edgeMat = new THREE.LineBasicMaterial({ color: C.sky, transparent: true, opacity: 0.75 });
-  const boxMat = new THREE.MeshStandardMaterial({ color: C.box, emissive: 0x05101f, roughness: 0.55, metalness: 0.25 });
+  const edgeMat = new THREE.LineBasicMaterial({ color: C.ink, transparent: true, opacity: 0.85 });
+  const boxMat = new THREE.MeshLambertMaterial({ color: C.box });
   function block(w, h, d) {
     const grp = new THREE.Group();
     const geo = new THREE.BoxGeometry(w, h, d);
@@ -333,13 +343,24 @@ async function main() {
     return m;
   }
   const billboards = [];
+  // soft shadows on the floor, so floating things sit in the drawing
+  const shadowGeo = new THREE.PlaneGeometry(1, 1);
+  shadowGeo.rotateX(-Math.PI / 2);
+  function floorShadow(x, z, w, d, opacity) {
+    const m = new THREE.Mesh(shadowGeo, new THREE.MeshBasicMaterial({ map: glowTex, color: 0x5a4a30, transparent: true, opacity, depthWrite: false }));
+    m.position.set(x, 0.02, z);
+    m.scale.set(w, 1, d);
+    m.renderOrder = -1;
+    scene.add(m);
+    return m;
+  }
 
   // ---- step labels above each station
   const LABELS = [["00", "SOURCES", SRC_X - 1, 9.4], ["01", "CONNECT", -14, 7.4], ["02", "CLEAN", GATE_X, 7.6], ["03", "MODEL", MODEL_X, 6.8], ["04", "DASHBOARD", DASH_X - 3.6, 9.2], ["05", "DECIDE", DECIDE_X, 6.4]];
   for (const [n, name, x, y] of LABELS) {
     const m = sprite(labelTexture(n + " —", name, renderer), 4.0, 1.0);
     m.position.set(x, y, 0);
-    m.material.opacity = 0.9;
+    m.material.opacity = 0.95;
     scene.add(m);
     billboards.push(m);
     await breathe();
@@ -355,6 +376,7 @@ async function main() {
     mesh.rotation.set(...s.r);
     scene.add(mesh);
     cards.push({ mesh, base: new THREE.Vector3(...s.p), rot: s.r, seed: Math.random() * 10 });
+    floorShadow(s.p[0], s.p[2], 3.2, 1.6, 0.13);
     await breathe();
   }
 
@@ -373,7 +395,7 @@ async function main() {
   const LUT_N = 160;
   const luts = curves.map((c) => { const pts = c.getSpacedPoints(LUT_N); return pts; });
   const gateU = luts.map((pts) => { let k = 0; while (k < LUT_N && pts[k].x < GATE_X) k++; return k / LUT_N; });
-  const pipeMat = new THREE.MeshBasicMaterial({ color: C.sky, transparent: true, opacity: 0.22, depthWrite: false });
+  const pipeMat = new THREE.MeshBasicMaterial({ color: C.ink, transparent: true, opacity: 0.2, depthWrite: false });
   const pipes = curves.map((c) => {
     const m = new THREE.Mesh(new THREE.TubeGeometry(c, 90, 0.035, 6, false), pipeMat);
     scene.add(m);
@@ -381,12 +403,12 @@ async function main() {
   });
   await breathe();
 
-  // particles: messy and warm before the gate, clean and blue after it; a few
-  // "bad rows" are stopped at the gate and drop away
+  // particles: messy reds and ochres before the gate, ballpoint blue after
+  // it; a few "bad rows" are stopped at the gate and drop away
   const PER = mobile ? 50 : 80, NP = PER * curves.length;
   const pPos = new Float32Array(NP * 3), pCol = new Float32Array(NP * 3);
   const pInfo = [];
-  const warmCols = [new THREE.Color(C.warm), new THREE.Color(C.red), new THREE.Color(C.violet), new THREE.Color(0xfacc15)];
+  const warmCols = [new THREE.Color(C.warm), new THREE.Color(C.red), new THREE.Color(C.violet), new THREE.Color(C.mustard)];
   for (let i = 0; i < NP; i++) {
     pInfo.push({
       c: i % curves.length, t0: Math.random(), spd: 0.8 + Math.random() * 0.4,
@@ -397,21 +419,21 @@ async function main() {
   const pGeo = new THREE.BufferGeometry();
   pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3).setUsage(THREE.DynamicDrawUsage));
   pGeo.setAttribute("color", new THREE.BufferAttribute(pCol, 3).setUsage(THREE.DynamicDrawUsage));
-  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: mobile ? 0.26 : 0.2, map: glowTex, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: mobile ? 0.24 : 0.19, map: glowTex, vertexColors: true, transparent: true, depthWrite: false }));
   particles.frustumCulled = false;
   scene.add(particles);
-  const skyCol = new THREE.Color(C.sky2), tmpCol = new THREE.Color();
+  const skyCol = new THREE.Color(C.sky), paperCol = new THREE.Color(C.paper), tmpCol = new THREE.Color();
   await breathe();
 
   // ---- 02 clean: the gate
   const gate = new THREE.Group();
   gate.position.set(GATE_X, 3, 0);
   gate.rotation.y = Math.PI / 2;
-  const ringMat = new THREE.MeshBasicMaterial({ color: C.sky, transparent: true, opacity: 0.9, toneMapped: false });
+  const ringMat = new THREE.MeshBasicMaterial({ color: C.ink, transparent: true, opacity: 0.9, toneMapped: false });
   gate.add(new THREE.Mesh(new THREE.TorusGeometry(2.3, 0.07, 12, 96), ringMat));
-  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.62, 0.02, 8, 96), new THREE.MeshBasicMaterial({ color: C.sky2, transparent: true, opacity: 0.4 }));
+  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.62, 0.02, 8, 96), new THREE.MeshBasicMaterial({ color: C.red, transparent: true, opacity: 0.7 }));
   gate.add(ring2);
-  const veilMat = new THREE.MeshBasicMaterial({ map: glowTex, color: C.sky, transparent: true, opacity: 0.18, depthWrite: false, blending: THREE.AdditiveBlending });
+  const veilMat = new THREE.MeshBasicMaterial({ map: glowTex, color: C.sky, transparent: true, opacity: 0.1, depthWrite: false });
   const veil = new THREE.Mesh(new THREE.CircleGeometry(2.3, 48), veilMat);
   gate.add(veil);
   scene.add(gate);
@@ -422,6 +444,8 @@ async function main() {
   await breathe();
 
   // ---- 03 model: a star schema
+  floorShadow(MODEL_X + 0.6, 0, 11, 10, 0.16);
+  floorShadow(DECIDE_X + 0.2, 0.4, 10, 6, 0.22);
   const fact = block(2.6, 1.0, 1.7);
   fact.position.set(MODEL_X, 2.6, 0);
   scene.add(fact);
@@ -430,7 +454,7 @@ async function main() {
   scene.add(factTag); billboards.push(factTag);
   const DIMS = [["Date", 3.9, -2.4], ["Customer", 0.6, -3.9], ["Product", 0.6, 3.9], ["Region", 3.9, 2.4], ["Channel", -2.9, 3.4]];
   const dims = [], rels = [];
-  const relMat = new THREE.LineBasicMaterial({ color: C.sky2, transparent: true, opacity: 0.8 });
+  const relMat = new THREE.LineBasicMaterial({ color: C.sky, transparent: true, opacity: 0.8 });
   for (const [name, dx, dz] of DIMS) {
     const b = block(1.6, 0.7, 1.0);
     b.position.set(MODEL_X + dx, 2.6, dz);
@@ -455,7 +479,7 @@ async function main() {
   const bInfo = Array.from({ length: NB }, (_, i) => ({ c: i % 3, t0: Math.random() }));
   const bGeo = new THREE.BufferGeometry();
   bGeo.setAttribute("position", new THREE.BufferAttribute(bPos, 3).setUsage(THREE.DynamicDrawUsage));
-  const beamPts = new THREE.Points(bGeo, new THREE.PointsMaterial({ color: C.sky2, size: mobile ? 0.24 : 0.18, map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  const beamPts = new THREE.Points(bGeo, new THREE.PointsMaterial({ color: C.sky, size: mobile ? 0.22 : 0.17, map: glowTex, transparent: true, depthWrite: false }));
   beamPts.frustumCulled = false;
   scene.add(beamPts);
   await breathe();
@@ -480,21 +504,19 @@ async function main() {
   const barW = (BAR_X1 - BAR_X0) / BARS.length;
   const barGeo = new THREE.BoxGeometry(barW * 0.62, 1, 0.34);
   barGeo.translate(0, 0.5, 0.17);
-  const barMat = new THREE.MeshStandardMaterial({ color: C.sky, emissive: 0x0a4a6e, roughness: 0.35, metalness: 0.2 });
+  const barMat = new THREE.MeshLambertMaterial({ color: C.sky });
   const bars = new THREE.InstancedMesh(barGeo, barMat, BARS.length);
   const m4 = new THREE.Matrix4(), v3 = new THREE.Vector3(), q4 = new THREE.Quaternion(), sc = new THREE.Vector3();
   dash.add(bars);
   const lineGeo = new THREE.BufferGeometry().setFromPoints(LINE.map((v, i) => new THREE.Vector3(LINE_X0 + ((LINE_X1 - LINE_X0) * i) / (LINE.length - 1), LINE_Y0 + v * (LINE_Y1 - LINE_Y0), 0.08)));
-  const trend = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: C.sky2, linewidth: 2 }));
+  const trend = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: C.red, linewidth: 2 }));
   dash.add(trend);
   const dotGeo = new THREE.SphereGeometry(0.07, 10, 8);
-  const dots = new THREE.InstancedMesh(dotGeo, new THREE.MeshBasicMaterial({ color: 0xe0f2fe }), LINE.length);
+  const dots = new THREE.InstancedMesh(dotGeo, new THREE.MeshBasicMaterial({ color: C.red }), LINE.length);
   LINE.forEach((v, i) => { m4.makeTranslation(LINE_X0 + ((LINE_X1 - LINE_X0) * i) / (LINE.length - 1), LINE_Y0 + v * (LINE_Y1 - LINE_Y0), 0.08); dots.setMatrixAt(i, m4); });
   dash.add(dots);
-  // soft glow behind the panel
-  const halo = new THREE.Mesh(new THREE.PlaneGeometry(PW * 1.5, PH * 1.6), new THREE.MeshBasicMaterial({ map: glowTex, color: C.deep, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending }));
-  halo.position.z = -0.3;
-  dash.add(halo);
+  // its shadow on the paper below
+  const halo = floorShadow(DASH_X, 0, PW * 1.1, 2.6, 0.2);
   await breathe();
 
   // ---- 05 decide: the dashboard on a laptop and a phone
@@ -504,7 +526,7 @@ async function main() {
   const lapBase = block(3.4, 0.14, 2.3);
   lapBase.position.set(-0.6, 1.6, 0.4);
   decide.add(lapBase);
-  const deskMat = new THREE.MeshStandardMaterial({ color: 0x0a1626, roughness: 0.8, metalness: 0.1 });
+  const deskMat = new THREE.MeshLambertMaterial({ color: 0xe6dcc9 });
   const desk = new THREE.Mesh(new THREE.BoxGeometry(8, 0.18, 4.2), deskMat);
   desk.position.set(0.2, 1.44, 0.4);
   decide.add(desk);
@@ -656,7 +678,7 @@ async function main() {
         const fall = (t - gu) / (1 - gu);
         const gp = lut[Math.round(gu * LUT_N)];
         x = gp.x - 0.3; y = gp.y - fall * 3.2; z = gp.z + pi.jit.z;
-        col = tmpCol.copy(warmCols[1]).multiplyScalar(Math.max(0, 1 - fall * 1.4));
+        col = tmpCol.copy(warmCols[1]).lerp(paperCol, Math.min(1, fall * 1.4));
       } else {
         col = tmpCol.copy(pi.warm).lerp(skyCol, clamp01((t - gu) * 14));
       }
@@ -669,7 +691,7 @@ async function main() {
     // the gate brightens while you read "clean"
     const atClean = inHero ? 0.6 : Math.max(0, 1 - Math.abs(g - 3.5) / 0.9);
     ringMat.opacity = 0.5 + 0.5 * Math.max(atClean, reveal * 0.4);
-    veilMat.opacity = 0.08 + 0.3 * atClean;
+    veilMat.opacity = 0.04 + 0.14 * atClean;
     ring2.rotation.z = clockT * 0.2;
     gateTag.material.opacity = Math.max(atClean, inHero ? 1 : 0.35);
 
@@ -699,7 +721,7 @@ async function main() {
     const drawn = Math.max(2, Math.round(LINE.length * smooth(clamp01(b * 1.4 - 0.3))));
     lineGeo.setDrawRange(0, drawn);
     dots.count = drawn;
-    halo.material.opacity = 0.15 + 0.3 * b;
+    halo.material.opacity = 0.08 + 0.14 * b;
 
     // screens light up on "decide"
     const h = Math.max(handed, done);
